@@ -1,0 +1,8 @@
+
+.mainSection {
+    margin: 0 auto;
+    max-width: 1240px;
+    background: #131316;
+    display: flex;
+    flex-direction: row;
+}
