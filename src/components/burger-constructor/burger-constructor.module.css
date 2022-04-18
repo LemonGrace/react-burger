@@ -1,0 +1,49 @@
+.section {
+    width: 600px;
+    flex-grow: 1;
+}
+.menuContainer {
+    /** TODO: понять, как верно расчитать высоту */
+    max-height: calc(100vh - 320px);
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.menuContainer::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2F2F37;
+}
+.menuContainer::-webkit-scrollbar-thumb{
+    background: #8585AD;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.itemCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.itemCardImage {
+    width: 80px;
+    height: 40px;
+}
+
+.itemCardImageBottom {
+    transform: rotate(180deg);
+}
+
+.itemCardP {
+    display: flex;
+}
+
+.finalContainer {
+    float: right;
+}
