@@ -3,8 +3,7 @@
     flex-grow: 1;
 }
 .menuContainer {
-    /** TODO: понять, как верно расчитать высоту */
-    max-height: calc(100vh - 320px);
+    max-height: calc(100vh - 495px);
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -23,11 +22,28 @@
     align-items: center;
 }
 
-.itemCard {
+.itemCardContainer {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+}
+
+.itemCard {
+    background: #1C1C21;
+    flex-grow: 1;
+    border-radius: 40px;
+}
+
+.itemCardBunUp {
+    border-radius: 88px 88px 40px 40px;
+}
+
+.itemCardBunDown {
+    border-radius: 40px 40px 88px 88px;
+}
+
+.itemCardCaption {
     flex-grow: 1;
 }
 

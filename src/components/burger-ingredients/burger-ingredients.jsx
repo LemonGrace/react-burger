@@ -3,11 +3,12 @@ import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
 import clsx from "clsx";
 import { Tab, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import {Ingredient} from "../../utils/type";
 
 const TabChoose = () => {
     const [current, setCurrent] = React.useState('one')
     return (
-        <div className="mb-10" style={{ display: 'flex' }}>
+        <div className={clsx(styles.tab, "mb-10")}>
             <Tab value="one" active={current === 'one'} onClick={setCurrent}>
                 Булки
             </Tab>
@@ -24,11 +25,11 @@ const TabChoose = () => {
 const IngredientsSection = (props) =>{
     return (
         <>
-            <h1 className={clsx(styles.ingredientsSectionCaption, "text_type_main-medium")}>{props.caption}</h1>
+            <h2 className={clsx(styles.ingredientsSectionCaption, "text_type_main-medium")}>{props.caption}</h2>
             <section className={clsx(styles.ingredientsSectionWrapper, 'mb-10 mr-2 ml-4')}>
-                {props.ingredients.map ((item, index) => {
+                {props.ingredients.map ((item) => {
                     return (
-                        <div key={index}>
+                        <div key={item._id}>
                             <img src={item.image} alt={"Карточка ингредиента"} className="pr-4 pl-4 pt-6"/>
                             <p className={clsx("text_type_digits-default m-1", styles.ingredientsSectionP,
                             styles.ingredientsSectionImage)}>
@@ -64,36 +65,10 @@ function BurgerIngredients(props) {
 export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.shape ({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-    }))
+    data: PropTypes.arrayOf(Ingredient.isRequired).isRequired
 }
 
 IngredientsSection.propTypes = {
-    ingredients: PropTypes.arrayOf(PropTypes.shape ({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-    })),
-    caption: PropTypes.string
+    ingredients: PropTypes.arrayOf(Ingredient.isRequired).isRequired,
+    caption: PropTypes.string.isRequired,
 }

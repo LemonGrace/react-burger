@@ -3,10 +3,10 @@
 }
 
 .menuContainer {
-    /** TODO: понять, как верно расчитать высоту */
     max-height: calc(100vh - 320px);
     overflow: hidden;
     overflow-y: scroll;
+    position: relative;
 }
 
 .menuContainer::-webkit-scrollbar {
@@ -38,4 +38,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.tab {
+    display: flex;
 }
