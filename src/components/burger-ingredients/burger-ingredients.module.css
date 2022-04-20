@@ -1,0 +1,45 @@
+.section {
+    max-width: 600px;
+}
+
+.menuContainer {
+    max-height: calc(100vh - 320px);
+    overflow: hidden;
+    overflow-y: scroll;
+    position: relative;
+}
+
+.menuContainer::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2F2F37;
+}
+.menuContainer::-webkit-scrollbar-thumb{
+    background: #8585AD;
+}
+
+
+.ingredientsSectionWrapper {
+    display: grid;
+    grid-template-columns: 272px 272px;
+    grid-column-gap: 24px;
+    grid-row-gap: 32px;
+}
+
+.ingredientsSectionCaption {
+    margin: 0;
+}
+
+.ingredientsSectionP {
+    margin: 0;
+    text-align: center;
+}
+
+.ingredientsSectionImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab {
+    display: flex;
+}

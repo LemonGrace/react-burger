@@ -1,0 +1,32 @@
+.section {
+    width: 600px;
+    flex-grow: 1;
+}
+.menuContainer {
+    max-height: calc(100vh - 495px);
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.menuContainer::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2F2F37;
+}
+.menuContainer::-webkit-scrollbar-thumb{
+    background: #8585AD;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.itemCard {
+    flex-grow: 1;
+    display: flex;
+}
+
+.finalContainer {
+    float: right;
+}
