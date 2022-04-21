@@ -9,6 +9,7 @@ import {
     DragIcon
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import {Ingredient} from "../../utils/type";
+import OrderDetails from "../order-details/order-details";
 
 
 function BurgerConstructor(props) {
@@ -54,6 +55,7 @@ function BurgerConstructor(props) {
                     thumbnail={bun.image}
                 />
             </div>
+            {props.showModal && <OrderDetails onClick={props.closeModal}/>}
             <div className={clsx("mt-10 mr-4 mb-10", styles.finalContainer, styles.container)}>
                 <div className={styles.container}>
                     <span className={clsx("mr-5 text_type_digits-default", styles.container)}>
@@ -61,7 +63,8 @@ function BurgerConstructor(props) {
                         <CurrencyIcon type="primary"/>
                     </span>
                 </div>
-                <Button type="primary" size="medium">
+                <Button type="primary" size="medium" onClick={(event) => {
+                    props.openModal("constructor", event)}}>
                     Оформить заказ
                 </Button>
             </div>
@@ -72,6 +75,8 @@ function BurgerConstructor(props) {
 export default BurgerConstructor;
 
 BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(Ingredient.isRequired).isRequired
+    data: PropTypes.arrayOf(Ingredient.isRequired).isRequired,
+    showModal: PropTypes.bool.isRequired,
+    openModal: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired
 }
-

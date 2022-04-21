@@ -43,3 +43,7 @@
 .tab {
     display: flex;
 }
+
+.ingredientsSectionContainer {
+    position: relative;
+}

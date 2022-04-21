@@ -1,0 +1,16 @@
+.detailsContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.caloriesInfoContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+}
+
+.infoP {
+    margin: 0;
+    text-align: center;
+}
