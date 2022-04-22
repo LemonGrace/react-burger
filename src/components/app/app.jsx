@@ -17,6 +17,9 @@ function App() {
               setState({...state, hasError: false, loading: true});
               const url = "https://norma.nomoreparties.space/api/ingredients";
               const response = await fetch(url);
+              if (!response.ok) {
+                  throw new Error("response is not ok");
+              }
               const data = await response.json();
               if (data && data.success === true) {
                   setState({...state, burgerData: data.data, hasError: false, loading: false});
@@ -29,7 +32,7 @@ function App() {
               setState({...state, hasError: true, loading: false});
           }
       }
-      getBurgerData().then();
+      getBurgerData();
       // eslint-disable-next-line
   }, []);
 
