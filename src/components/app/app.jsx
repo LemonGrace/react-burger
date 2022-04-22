@@ -13,19 +13,19 @@ function App() {
 
   React.useEffect(() => {
       const getBurgerData = async () => {
-          setState({...state, hasError: false, loading: true});
-          const url = "https://norma.nomoreparties.space/api/ingredients";
-          const data = await fetch(url).then(response => {
-              return response.json();
-          }).catch(e => {
-              setState({...state, hasError: true, loading: false});
-              console.log(e);
-          });
-
-          if (data && data.success) {
-              setState({...state, burgerData: data.data, hasError: false, loading: false});
+          try {
+              setState({...state, hasError: false, loading: true});
+              const url = "https://norma.nomoreparties.space/api/ingredients";
+              const response = await fetch(url);
+              const data = await response.json();
+              if (data && data.success === true) {
+                  setState({...state, burgerData: data.data, hasError: false, loading: false});
+              } else {
+                  throw new Error("DataError");
+              }
           }
-          else {
+          catch (e) {
+              console.log(e)
               setState({...state, hasError: true, loading: false});
           }
       }
@@ -47,7 +47,6 @@ function App() {
         }
     }
 
-    // eslint-disable-next-line
     const modalClose = () => {
         if (isVisibleDetails) {
             setVisibleDetails(false);
@@ -56,16 +55,6 @@ function App() {
             setVisibleConstructor(false);
         }
     }
-
-    React.useEffect(() => {
-        const close = (e) => {
-            if(e.keyCode === 27 && (isVisibleConstructor || isVisibleDetails)){
-                modalClose();
-            }
-        }
-        window.addEventListener('keydown', close)
-        return () => window.removeEventListener('keydown', close)
-    },[isVisibleConstructor, isVisibleDetails, modalClose])
 
 
   return (

@@ -10,6 +10,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import {Ingredient} from "../../utils/type";
 import OrderDetails from "../order-details/order-details";
+import Modal from "../modal/modal";
 
 
 function BurgerConstructor(props) {
@@ -55,7 +56,10 @@ function BurgerConstructor(props) {
                     thumbnail={bun.image}
                 />
             </div>
-            {props.showModal && <OrderDetails onClick={props.closeModal}/>}
+            {props.showModal &&
+            <Modal caption={""} onClick={props.closeModal}>
+                <OrderDetails/>
+            </Modal>}
             <div className={clsx("mt-10 mr-4 mb-10", styles.finalContainer, styles.container)}>
                 <div className={styles.container}>
                     <span className={clsx("mr-5 text_type_digits-default", styles.container)}>

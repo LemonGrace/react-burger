@@ -6,7 +6,24 @@ import clsx from "clsx";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
 
+const modalRoot = document.getElementById("modals");
+
 function Modal(props) {
+
+    const escClose = React.useCallback((event) => {
+        if (event.key === 'Escape') {
+            props.onClick();
+        }
+        //eslint-disable-next-line
+    }, []);
+
+    React.useEffect(() => {
+        document.addEventListener("keydown", escClose);
+        return () => {
+            document.removeEventListener("keydown", escClose);
+        };
+    }, [escClose]);
+
     return ReactDOM.createPortal(
         <React.Fragment>
             <ModalOverlay onClick={props.onClick}/>
@@ -19,7 +36,7 @@ function Modal(props) {
                 {props.children}
             </div>
         </React.Fragment>
-        , document.body)
+        , modalRoot)
 }
 
 export default Modal;

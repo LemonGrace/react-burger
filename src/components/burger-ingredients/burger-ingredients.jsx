@@ -5,6 +5,7 @@ import clsx from "clsx";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import {Ingredient} from "../../utils/type";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from "../modal/modal";
 
 const TabChoose = () => {
     const [current, setCurrent] = React.useState('one')
@@ -62,7 +63,11 @@ function BurgerIngredients(props) {
         <section className={clsx(styles.section, "mr-10")}>
             <h1 className="text text_type_main-large pt-10 pb-5">Соберите бургер</h1>
             <TabChoose/>
-            {props.showModal && <IngredientDetails onClick={props.closeModal} data={ingredient}/>}
+            {props.showModal &&
+            <Modal caption={"Детали ингредиента"} onClick={props.closeModal}>
+                <IngredientDetails data={ingredient}/>
+            </Modal>
+            }
             <div className={styles.menuContainer}>
                 <IngredientsSection
                     ingredients={bunArray}
