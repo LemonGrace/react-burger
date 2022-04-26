@@ -3,6 +3,7 @@ import AppHeader from '../app-header/app-header';
 import styles from './app.module.css';
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
+import {BurgerContext} from "../../utils/burgerContext";
 
 function App() {
   const [state, setState] = React.useState({
@@ -69,10 +70,11 @@ function App() {
                                showModal={isVisibleDetails}
                                openModal={modalOpen}
                                closeModal={modalClose}/>
-            <BurgerConstructor data={state.burgerData}
-                               showModal={isVisibleConstructor}
-                               openModal={modalOpen}
-                               closeModal={modalClose}/>
+            <BurgerContext.Provider value={state.burgerData}>
+                <BurgerConstructor showModal={isVisibleConstructor}
+                                   openModal={modalOpen}
+                                   closeModal={modalClose}/>
+            </BurgerContext.Provider>
         </main>}
       </>
   );
