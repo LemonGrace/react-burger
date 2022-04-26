@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import styles from "./app-header.module.css";
 import { BurgerIcon, ListIcon, ProfileIcon, Logo } from '@ya.praktikum/react-developer-burger-ui-components'
 
-function AppHeader() {
+function WrappedComponent() {
     return (
         <header className={styles.appHeaderWrapper}>
             <nav className={styles.appHeaderNavigation}>
@@ -26,4 +26,5 @@ function AppHeader() {
     );
 }
 
+const AppHeader = React.memo(WrappedComponent);
 export default AppHeader;

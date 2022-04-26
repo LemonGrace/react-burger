@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import styles from './burger-constructor.module.css';
 import PropTypes from 'prop-types';
 import clsx from "clsx";
@@ -16,10 +16,22 @@ import {checkResponse} from "../app/app";
 
 function BurgerConstructor(props) {
     const burgerData = React.useContext(BurgerContext);
-    const bun = burgerData.filter(item => item.type === "bun")[0];
-    const finalCost = burgerData.filter(item => item.type !== "bun").reduce(function (prev,next) {
-        return prev + next.price;
-    },0) + 2*bun.price;
+    /** Получение булочки*/
+    const bun = useMemo(() => {
+        return burgerData.filter(item => item.type === "bun")[0];
+    }, [burgerData]);
+
+    /** Получение массива ингредиентов без булочек*/
+    const ingredients = useMemo(() => {
+        return burgerData.filter(item => item.type !== "bun");
+    }, [burgerData]);
+
+    /** Вычисление итоговой стоимости заказа*/
+    const finalCost = useMemo(() => {
+        return ingredients.reduce(function (prev, next) {
+            return prev + next.price;
+        }, 0) + 2 * bun.price;
+    }, [ingredients, bun])
     const initialState = { sum: finalCost };
     function reducer(state, action, item) {
         switch (action.type) {
@@ -34,6 +46,7 @@ function BurgerConstructor(props) {
     // eslint-disable-next-line
     const [state, dispatch] = React.useReducer(reducer, initialState, undefined);
 
+    /** Получение статуса заказа */
     const [stateOrder, setState] = React.useState({
         order: null,
         loading: true,
@@ -44,7 +57,7 @@ function BurgerConstructor(props) {
         try {
             setState({...stateOrder, hasError: false, loading: true});
             const requestData = [];
-            burgerData.filter(item => item.type !== "bun").map((item) => {return requestData.push(item._id)});
+            ingredients.map((item) => {return requestData.push(item._id)});
             requestData.push(bun._id);
             const url = BaseUrl + "orders";
             const response = await fetch(url, {
@@ -71,19 +84,10 @@ function BurgerConstructor(props) {
         }
     }
 
-    return (
-        <section className={clsx(styles.section, "mt-25")}>
-            <div className={"mr-4 ml-4 pl-8"}>
-                <ConstructorElement
-                    type="top"
-                    isLocked={true}
-                    text={bun.name + " (верх)"}
-                    price={bun.price}
-                    thumbnail={bun.image}
-                />
-            </div>
+    const IngredientSection = useMemo(() => {
+        return (
             <div className={clsx(styles.menuContainer)}>
-                {burgerData.filter(item => item.type !== "bun").map((item) => {
+                {ingredients.map((item) => {
                     return (
                         <div key={item._id} className={clsx(styles.container, "mr-2 ml-4 mt-4")}>
                             <DragIcon type="primary" />
@@ -98,6 +102,21 @@ function BurgerConstructor(props) {
                     )
                 })}
             </div>
+        );
+    }, [ingredients]);
+
+    return (
+        <section className={clsx(styles.section, "mt-25")}>
+            <div className={"mr-4 ml-4 pl-8"}>
+                <ConstructorElement
+                    type="top"
+                    isLocked={true}
+                    text={bun.name + " (верх)"}
+                    price={bun.price}
+                    thumbnail={bun.image}
+                />
+            </div>
+            {IngredientSection}
             <div className={"mr-4 ml-4 mt-4 pl-8"}>
                 <ConstructorElement
                     type="bottom"

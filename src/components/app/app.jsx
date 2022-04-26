@@ -67,22 +67,20 @@ function App() {
 
 
   return (
-      <>
-          <BurgerContext.Provider value={state.burgerData}>
-              <AppHeader/>
-              {!state.hasError && !state.loading &&
-              <main className={styles.mainSection}>
-                  <BurgerIngredients showModal={isVisibleDetails}
-                                     openModal={modalOpen}
-                                     closeModal={modalClose}/>
+      <BurgerContext.Provider value={state.burgerData}>
+          <AppHeader/>
+          {!state.hasError && !state.loading &&
+          <main className={styles.mainSection}>
+              <BurgerIngredients showModal={isVisibleDetails}
+                                 openModal={modalOpen}
+                                 closeModal={modalClose}/>
 
-                  <BurgerConstructor showModal={isVisibleConstructor}
-                                     openModal={modalOpen}
-                                     closeModal={modalClose}/>
+              <BurgerConstructor showModal={isVisibleConstructor}
+                                 openModal={modalOpen}
+                                 closeModal={modalClose}/>
 
-              </main>}
-          </BurgerContext.Provider>
-      </>
+          </main>}
+      </BurgerContext.Provider>
   );
 }
 
