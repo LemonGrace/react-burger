@@ -3,6 +3,14 @@ import AppHeader from '../app-header/app-header';
 import styles from './app.module.css';
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
+import {BurgerContext} from "../../utils/burgerContext";
+import {BaseUrl} from '../../utils/baseUrl';
+
+export function checkResponse(response) {
+    if (!response.ok) {
+        throw new Error("response is not ok");
+    }
+}
 
 function App() {
   const [state, setState] = React.useState({
@@ -15,11 +23,9 @@ function App() {
       const getBurgerData = async () => {
           try {
               setState({...state, hasError: false, loading: true});
-              const url = "https://norma.nomoreparties.space/api/ingredients";
+              const url = BaseUrl + "ingredients";
               const response = await fetch(url);
-              if (!response.ok) {
-                  throw new Error("response is not ok");
-              }
+              checkResponse(response);
               const data = await response.json();
               if (data && data.success === true) {
                   setState({...state, burgerData: data.data, hasError: false, loading: false});
@@ -61,20 +67,20 @@ function App() {
 
 
   return (
-      <>
-        <AppHeader/>
-        {!state.hasError && !state.loading &&
-        <main className={styles.mainSection}>
-            <BurgerIngredients data={state.burgerData}
-                               showModal={isVisibleDetails}
-                               openModal={modalOpen}
-                               closeModal={modalClose}/>
-            <BurgerConstructor data={state.burgerData}
-                               showModal={isVisibleConstructor}
-                               openModal={modalOpen}
-                               closeModal={modalClose}/>
-        </main>}
-      </>
+      <BurgerContext.Provider value={state.burgerData}>
+          <AppHeader/>
+          {!state.hasError && !state.loading &&
+          <main className={styles.mainSection}>
+              <BurgerIngredients showModal={isVisibleDetails}
+                                 openModal={modalOpen}
+                                 closeModal={modalClose}/>
+
+              <BurgerConstructor showModal={isVisibleConstructor}
+                                 openModal={modalOpen}
+                                 closeModal={modalClose}/>
+
+          </main>}
+      </BurgerContext.Provider>
   );
 }
 
