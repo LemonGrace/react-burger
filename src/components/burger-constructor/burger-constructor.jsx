@@ -11,6 +11,8 @@ import {
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {BurgerContext} from "../../utils/burgerContext";
+import {BaseUrl} from '../../utils/baseUrl';
+import {checkResponse} from "../app/app";
 
 function BurgerConstructor(props) {
     const burgerData = React.useContext(BurgerContext);
@@ -29,6 +31,7 @@ function BurgerConstructor(props) {
                 throw new Error(`Wrong type of action: ${action.type}`);
         }
     }
+    // eslint-disable-next-line
     const [state, dispatch] = React.useReducer(reducer, initialState, undefined);
 
     const [stateOrder, setState] = React.useState({
@@ -43,7 +46,7 @@ function BurgerConstructor(props) {
             const requestData = [];
             burgerData.filter(item => item.type !== "bun").map((item) => {return requestData.push(item._id)});
             requestData.push(bun._id);
-            const url = "https://norma.nomoreparties.space/api/orders";
+            const url = BaseUrl + "orders";
             const response = await fetch(url, {
                 method: 'POST',
                 mode: 'cors',
@@ -54,9 +57,7 @@ function BurgerConstructor(props) {
                 },
                 body:  JSON.stringify({ingredients: requestData})
             });
-            if (!response.ok) {
-                throw new Error("response is not ok");
-            }
+            checkResponse(response);
             const data = await response.json();
             if (data && data.success === true) {
                 setState({...stateOrder, order: data.order.number, hasError: false, loading: false});

@@ -6,6 +6,7 @@ import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-u
 import {Ingredient} from "../../utils/type";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
+import {BurgerContext} from "../../utils/burgerContext";
 
 const TabChoose = () => {
     const [current, setCurrent] = React.useState('one')
@@ -54,9 +55,10 @@ const IngredientsSection = (props) =>{
 }
 
 function BurgerIngredients(props) {
-    const bunArray = props.data.filter(item => item.type === "bun");
-    const sauceArray = props.data.filter(item => item.type === "sauce");
-    const mainArray = props.data.filter(item => item.type === "main");
+    const burgerData = React.useContext(BurgerContext);
+    const bunArray = burgerData.filter(item => item.type === "bun");
+    const sauceArray = burgerData.filter(item => item.type === "sauce");
+    const mainArray = burgerData.filter(item => item.type === "main");
     const [ingredient, setIngredient] = React.useState({});
 
     return (
@@ -96,7 +98,6 @@ function BurgerIngredients(props) {
 export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(Ingredient.isRequired).isRequired,
     showModal: PropTypes.bool.isRequired,
     openModal: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired
