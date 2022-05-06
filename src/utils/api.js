@@ -14,7 +14,7 @@ export const getBurgerData = async () => {
         return response.json();
     }
     catch (e) {
-        return "Has error";
+        throw new Error("response is not ok");
     }
 }
 
@@ -37,6 +37,6 @@ export const createOrder = async (ingredients) => {
         return response.json();
     }
     catch (e) {
-        return "Has error";
+        throw new Error("response is not ok");
     }
 }

@@ -109,10 +109,20 @@ export const order = (state = initialStateOrder, action) => {
         }
         case REORDER: {
             let arr = [...state.content];
-            let indexFrom = arr.findIndex(item => item.order === action.from);
-            let indexTo = arr.findIndex(item => item.order === action.to);
-            arr[indexFrom] = {...arr[indexFrom], order: action.to};
-            arr[indexTo] = {...arr[indexTo], order: action.from};
+            const indexFrom = arr.findIndex(item => item.order === action.from);
+            if (action.from >  action.to) {
+                arr.map((item) => {
+                    return item.order >= action.to ?
+                        item.order !== action.from ? ++item.order : item.order : item.order;
+                })
+                arr[indexFrom] = {...arr[indexFrom], order: action.to};
+            } else {
+                arr.map((item) => {
+                    return item.order <= action.to ?
+                        item.order !== action.from ? --item.order : item.order : item.order;
+                })
+                arr[indexFrom] = {...arr[indexFrom], order: action.to};
+            }
             return { ...state, content: arr};
         }
         case REPLACE_BUN: {

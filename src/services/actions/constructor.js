@@ -24,6 +24,10 @@ export function getOrder(data) {
                     type: CREATE_ORDER_ERROR
                 });
             }
+        }).catch(e => {
+            dispatch({
+                type: CREATE_ORDER_ERROR
+            });
         });
     };
 }

@@ -20,6 +20,10 @@ export function getItems() {
                     type: INGREDIENTS_ERROR
                 });
             }
+        }).catch(e => {
+            dispatch({
+                type: INGREDIENTS_ERROR
+            });
         });
     };
 }
