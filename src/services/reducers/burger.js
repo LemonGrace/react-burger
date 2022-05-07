@@ -5,7 +5,7 @@ import {
     ADD_INGREDIENT,
     CREATE_ORDER_ERROR,
     CREATE_ORDER_REQUEST,
-    CREATE_ORDER_SUCCESS, DEFAULT, REORDER,
+    CREATE_ORDER_SUCCESS, DEFAULT, DELETE_ORDER, REORDER,
     REPLACE_BUN
 } from "../actions/constructor";
 
@@ -82,7 +82,7 @@ export const modal = (state = initialStateModal, action) => {
 
 /** редьюсер для работы с заказом */
 const initialStateOrder = {
-    order: 0,
+    order: null,
     orderRequest: false,
     orderFailed: false,
     content: []
@@ -101,6 +101,9 @@ export const order = (state = initialStateOrder, action) => {
         }
         case CREATE_ORDER_ERROR: {
             return { ...state, orderFailed: true, orderRequest: false };
+        }
+        case DELETE_ORDER: {
+            return {...state, order: null};
         }
         case ADD_INGREDIENT: {
             let arr = [...state.content];

@@ -6,23 +6,36 @@ import clsx from "clsx";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
 import {DELETE_TYPE, DELETE_VISIBLE} from "../../services/actions/modal";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {DELETE_INGREDIENT} from "../../services/actions/details";
+import {DELETE_ORDER} from "../../services/actions/constructor";
 
 const modalRoot = document.getElementById("modals");
 
 function Modal(props) {
     const dispatch = useDispatch();
-    const handleClose = () => {
+    const type = useSelector(state => state.modal.type);
+    const handleClose = React.useCallback(() => {
         dispatch({type: DELETE_VISIBLE});
-        dispatch({type: DELETE_INGREDIENT});
+        switch (type) {
+            case "details": {
+                dispatch({type: DELETE_INGREDIENT});
+                return;
+            }
+            case "order": {
+                dispatch({type: DELETE_ORDER});
+                return;
+            }
+            default :
+                break;
+        }
         dispatch({type: DELETE_TYPE});
-    }
+    }, [type, dispatch]);
     const escClose = React.useCallback((event) => {
         if (event.key === 'Escape') {
             handleClose();
         }
-    }, [dispatch]);
+    }, [handleClose]);
 
     React.useEffect(() => {
         document.addEventListener("keydown", escClose);
