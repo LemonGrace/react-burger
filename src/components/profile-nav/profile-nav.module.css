@@ -1,0 +1,20 @@
+.active {
+    color: #F2F2F3;
+}
+
+.linkBlock {
+    height: 64px;
+    display: flex;
+    align-items: center;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.logout {
+    margin: 0;
+}
+.logout:hover {
+    cursor: pointer;
+}

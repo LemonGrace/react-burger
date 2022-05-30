@@ -14,6 +14,8 @@ import {SET_TYPE, SET_VISIBLE} from "../../services/actions/modal";
 import {DELETE_INGREDIENT} from "../../services/actions/details";
 import {useDrag, useDrop} from "react-dnd";
 import {ADD_INGREDIENT, DEFAULT, getOrder, REORDER, REPLACE_BUN} from "../../services/actions/constructor";
+import { useHistory } from 'react-router-dom';
+import {getCookie} from "../../utils/cookie";
 
 
 function BurgerConstructor() {
@@ -112,6 +114,10 @@ function BurgerConstructor() {
         })
     });
 
+    /**Реализация переадресации, если нет данных об авторизации*/
+    const history = useHistory();
+    const isAuth = !!getCookie('token');
+
     /** Подсветка области, если мало или вообще нет элементов в заказе */
     const needShowDrop = content.length < 3 ? isHover ? styles.canDrop : "" : "";
     return (
@@ -150,10 +156,14 @@ function BurgerConstructor() {
                         <CurrencyIcon type="primary"/>
                     </span>
                 </div>
-                <Button type="primary" size="medium" onClick={async (event) => {
-                    dispatch({type: SET_VISIBLE});
-                    dispatch({type: SET_TYPE, modalType: "order"});
-                    dispatch(getOrder(content));
+                <Button type="primary" size="medium" onClick={() => {
+                    if (isAuth) {
+                        dispatch({type: SET_VISIBLE});
+                        dispatch({type: SET_TYPE, modalType: "order"});
+                        dispatch(getOrder(content));
+                    } else {
+                        history.push("/login");
+                    }
                 }}>
                     Оформить заказ
                 </Button>
@@ -162,5 +172,5 @@ function BurgerConstructor() {
     );
 }
 
-export default BurgerConstructor;
+export default React.memo(BurgerConstructor);
 

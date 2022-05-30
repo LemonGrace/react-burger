@@ -1,6 +1,6 @@
 import {INGREDIENTS_REQUEST, INGREDIENTS_SUCCESS, INGREDIENTS_ERROR} from "../actions/ingredients";
 import {DELETE_INGREDIENT, SET_INGREDIENT } from "../actions/details";
-import {DELETE_TYPE, DELETE_VISIBLE, SET_TYPE, SET_VISIBLE} from "../actions/modal";
+import {DELETE_TYPE, DELETE_VISIBLE, SET_INTERNAL, SET_TYPE, SET_VISIBLE} from "../actions/modal";
 import {
     ADD_INGREDIENT,
     CREATE_ORDER_ERROR,
@@ -60,12 +60,16 @@ export const ingredientDetails = (state = initialStateSelectedItem, action) => {
 /** редьюсер для работы с модальным окном */
 const initialStateModal = {
     isVisible: false,
+    isInternalLink: false,
     type: ""
 }
 export const modal = (state = initialStateModal, action) => {
     switch (action.type) {
         case SET_VISIBLE: {
             return { ...state, isVisible: true };
+        }
+        case SET_INTERNAL: {
+            return { ...state, isInternalLink: true };
         }
         case DELETE_VISIBLE: {
             return { ...state, isVisible: false };

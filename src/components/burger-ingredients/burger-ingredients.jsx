@@ -3,13 +3,12 @@ import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
 import clsx from "clsx";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import Modal from "../modal/modal";
 import { useSelector, useDispatch  } from 'react-redux';
 import {SET_INGREDIENT} from "../../services/actions/details";
-import { SET_TYPE, SET_VISIBLE } from "../../services/actions/modal";
+import {SET_INTERNAL, SET_TYPE, SET_VISIBLE} from "../../services/actions/modal";
 import {Ingredient} from "../../utils/type";
 import {useDrag} from "react-dnd";
+import {useHistory} from "react-router-dom";
 
 const DraggableCard = ({item}) => {
     const dispatch = useDispatch();
@@ -31,12 +30,17 @@ const DraggableCard = ({item}) => {
         type: "ingredients",
         item: item,
     });
+    const history = useHistory();
     return (
         <div className={clsx(styles.ingredientsSectionContainer, "mt-6")}
              onClick={() => {
-                 dispatch({type: SET_INGREDIENT, item});
-                 dispatch({type: SET_VISIBLE});
-                 dispatch({type: SET_TYPE, modalType: "details"});
+                 //dispatch({type: SET_INGREDIENT, item});
+                 //dispatch({type: SET_INTERNAL});
+                 //dispatch({type: SET_TYPE, modalType: "details"});
+                 history.push({
+                     pathname: `/ingredients/${item._id}`,
+                     state: { inner: true },
+                 });
              }} ref={dragRef}>
             {
                 count.find(value => item._id === value.item._id) &&
@@ -134,11 +138,6 @@ function WrappedComponent() {
         <section className={clsx(styles.section, "mr-10")}>
             <h1 className="text text_type_main-large pt-10 pb-5">Соберите бургер</h1>
             <TabChoose/>
-            {isVisible && type === "details" &&
-            <Modal caption={"Детали ингредиента"}>
-                <IngredientDetails/>
-            </Modal>
-            }
             <div className={styles.menuContainer} onScroll={(event => {scrollPosition(event)})}>
                 <IngredientsSection
                     ingredients={bunArray}
