@@ -6,6 +6,7 @@ import BurgerIngredients from "../../components/burger-ingredients/burger-ingred
 import BurgerConstructor from "../../components/burger-constructor/burger-constructor";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import styles from './home.module.css'
+import Loading from "../../components/loading/loading";
 
 
 function HomePage() {
@@ -13,12 +14,11 @@ function HomePage() {
     const {isIngredientsLoading, isIngredientsFailed} = useSelector((state) => state.burgerIngredient);
     const dispatch = useDispatch();
     React.useEffect(() => {
-        //dispatch(getIngredients());
+        dispatch(getIngredients());
     }, [dispatch])
 
-    // TODO: лоадинг!
     if (isIngredientsLoading || isIngredientsFailed) {
-        return (<></>)
+        return (<Loading/>)
     }
     return (
         <main className={styles.mainSection}>

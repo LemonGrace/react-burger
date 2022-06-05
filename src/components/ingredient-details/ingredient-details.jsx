@@ -4,6 +4,7 @@ import clsx from "clsx";
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from "react-router-dom";
 import {getIngredients} from "../../services/actions/ingredients";
+import Loading from "../loading/loading";
 
 function IngredientDetails() {
     const {ingredients, isIngredientsLoading, isIngredientsFailed} = useSelector((state) => state.burgerIngredient);
@@ -13,9 +14,9 @@ function IngredientDetails() {
     React.useEffect(() => {
         dispatch(getIngredients());
     }, [dispatch])
-    // TODO: сделать компонент лоудера!
+
     if (isIngredientsLoading || isIngredientsFailed || ingredients.length < 1) {
-        return null;
+        return (<Loading/>);
     }
     const ingredientSelected = ingredients.find(item => item._id === id);
     return (

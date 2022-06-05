@@ -15,6 +15,7 @@ import {useDispatch, useSelector} from "react-redux";
 import styles from '../modal/modal.module.css';
 import clsx from "clsx";
 import {getUser} from "../../services/actions/auth";
+import Loading from "../loading/loading";
 
 
 const Main = () => {
@@ -62,10 +63,9 @@ const Main = () => {
 function App() {
     /** Получение данных об авторизации */
     const dispatch = useDispatch();
-    const {isAuth} = useSelector(state => state.user);
-    console.log("gjjgj")
+    const {isAuth, isUserLoading} = useSelector(state => state.user);
     if (!isAuth && getCookie("token")) {
-        dispatch(getUser());
+        if (!isUserLoading) dispatch(getUser());
     }
     return (
         <React.Fragment>

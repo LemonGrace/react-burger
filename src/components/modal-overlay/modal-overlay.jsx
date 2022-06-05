@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './modal-overlay.module.css';
 import {useDispatch} from 'react-redux';
-import {closeModal, DELETE_TYPE, DELETE_VISIBLE} from '../../services/actions/modal';
+import {closeModal} from '../../services/actions/modal';
 import {useHistory, useRouteMatch} from "react-router-dom";
 
 function ModalOverlay() {
@@ -13,7 +13,7 @@ function ModalOverlay() {
         if (type === "details") {
             history.goBack();
         } else {
-            dispatch(closeModal);
+            dispatch(closeModal());
         }
     }
 

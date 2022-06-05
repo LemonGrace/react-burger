@@ -12,7 +12,7 @@ import {DATA} from "../../utils/data";
 
 /** редьюсер для загрузки данных */
 const initialState = {
-    ingredients: DATA,
+    ingredients: [],
     isIngredientsLoading: false,
     isIngredientsFailed: false,
 }
@@ -60,32 +60,20 @@ export const ingredientDetails = (state = initialStateSelectedItem, action) => {
 /** редьюсер для работы с модальным окном */
 
 export const SET_VISIBLE = 'SET_VISIBLE';
-export const SET_INTERNAL = 'SET_INTERNAL';
 export const DELETE_VISIBLE = 'DELETE_VISIBLE';
 export const SET_TYPE = 'SET_TYPE';
 export const DELETE_TYPE = 'DELETE_TYPE';
 
 const initialStateModal = {
     isVisible: false,
-    isInternalLink: false,
-    type: ""
 }
 export const modal = (state = initialStateModal, action) => {
     switch (action.type) {
         case SET_VISIBLE: {
             return { ...state, isVisible: true };
         }
-        case SET_INTERNAL: {
-            return { ...state, isInternalLink: true };
-        }
         case DELETE_VISIBLE: {
             return { ...state, isVisible: false };
-        }
-        case DELETE_TYPE: {
-            return { ...state, type: "" };
-        }
-        case SET_TYPE: {
-            return { ...state, type: action.modalType };
         }
         default: return state;
     }

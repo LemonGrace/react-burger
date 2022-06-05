@@ -1,11 +1,12 @@
 import React, {useCallback, useState} from "react";
 import {deleteCookie, getCookie} from "../../utils/cookie";
 import {useDispatch, useSelector} from "react-redux";
-import {Link, Redirect} from "react-router-dom";
+import {Link, Redirect, useHistory, useLocation} from "react-router-dom";
 import clsx from "clsx";
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password.module.css'
 import {resetPassword} from "../../services/actions/auth";
+import Loading from "../../components/loading/loading";
 
 function PasswordResetPage() {
 
@@ -16,16 +17,9 @@ function PasswordResetPage() {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 
-    /** Получение данных об авторизации */
-    const isAuth = !!getCookie('token');
-    let hasAccess = !!getCookie('emailResetSend');
-    React.useEffect(() => {
-        //eslint-disable-next-line
-        hasAccess = !!getCookie('emailResetSend');
-    })
-
-    const {resetPasswordFailed} = useSelector(state => state.resetPassword)
-    // TODO: в свободное время добавить обработку ошибки
+    const {isRequestLoading, isRequestFailed, isPasswordReset} = useSelector(state => state.resetPassword);
+    const canGoToNextStep = !isRequestLoading && !isRequestFailed && isPasswordReset;
+    const history = useHistory();
 
     /** Установка нового пароля */
     const dispatch = useDispatch();
@@ -38,43 +32,49 @@ function PasswordResetPage() {
         [form, dispatch]
     );
 
-    /** Если еще не подгрузились данные, но ничего не делать */
-    const {loginRequest} = useSelector(state => state.login);
-    if (loginRequest) {
-        return null;
+    React.useEffect(() => {
+        if (canGoToNextStep) {
+            history.replace({
+                pathname: "/login",
+            });
+        }
+    }, [history, canGoToNextStep])
+
+    /** Получение данных о возможности доступа */
+    const location = useLocation();
+    if (!location.state && !location.state.emailHasChecked) {
+        return (
+            <Redirect to={"/"}/>
+        )
+    }
+    // TODO: в свободное время добавить обработку ошибки
+    if (isRequestLoading) {
+        return (<Loading/>)
     }
 
-    if(!isAuth && hasAccess) {
-        return (
-            <form className={styles.wrapper} onSubmit={reset}>
-                <h1 className={clsx(styles.header, "mb-6 text_type_main-medium")}>Восстановление пароля</h1>
-                <div className={"mb-6"}>
-                    <Input
-                        onChange={onChange}
-                        value={form.password}
-                        name={'password'}
-                        placeholder={"Введите новый пароль"}
-                        icon={'ShowIcon'}
-                    />
-                </div>
-                <div className={"mb-6"}>
-                    <Input onChange={onChange} value={form.token} name={'token'} placeholder={"Введите код из письма"}/>
-                </div>
-                <div className={"mb-20"}>
-                    <Button type="primary" size="medium" onClick={form.submit}> Сохранить </Button>
-                </div>
-                <p className={clsx(styles.text, "text_type_main-default text_color_inactive")}>
-                    Вспомнили пароль? <Link to={"/login"} className={styles.link}> Войти </Link>
-                </p>
-            </form>
-        );
-    } else {
-        return (
-            <Redirect
-                to={{pathname: '/login'}}
-            />
-        );
-    }
+    return (
+        <form className={styles.wrapper} onSubmit={reset}>
+            <h1 className={clsx(styles.header, "mb-6 text_type_main-medium")}>Восстановление пароля</h1>
+            <div className={"mb-6"}>
+                <Input
+                    onChange={onChange}
+                    value={form.password}
+                    name={'password'}
+                    placeholder={"Введите новый пароль"}
+                    icon={'ShowIcon'}
+                />
+            </div>
+            <div className={"mb-6"}>
+                <Input onChange={onChange} value={form.token} name={'token'} placeholder={"Введите код из письма"}/>
+            </div>
+            <div className={"mb-20"}>
+                <Button type="primary" size="medium" onClick={form.submit}> Сохранить </Button>
+            </div>
+            <p className={clsx(styles.text, "text_type_main-default text_color_inactive")}>
+                Вспомнили пароль? <Link to={"/login"} className={styles.link}> Войти </Link>
+            </p>
+        </form>
+    );
 
 }
 export default React.memo(PasswordResetPage);

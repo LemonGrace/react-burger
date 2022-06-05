@@ -5,10 +5,9 @@ import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import clsx from "clsx";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
-import {closeModal, DELETE_TYPE, DELETE_VISIBLE} from "../../services/actions/modal";
+import {closeModal} from "../../services/actions/modal";
 import {useDispatch} from "react-redux";
-import {DELETE_ORDER} from "../../services/actions/constructor";
-import {Link, useHistory, useRouteMatch} from "react-router-dom";
+import {useHistory, useRouteMatch} from "react-router-dom";
 
 const modalRoot = document.getElementById("modals");
 
@@ -22,8 +21,7 @@ function Modal(props) {
         if (type === "details") {
             history.goBack();
         } else {
-            console.log("kere")
-            dispatch(closeModal);
+            dispatch(closeModal());
         }
     }, [type, dispatch, history]);
     const escClose = React.useCallback((event) => {
@@ -50,7 +48,7 @@ function Modal(props) {
                 <div className={clsx("text_type_main-large mt-10 mr-10 ml-10", styles.modalHeader,
                     !props.caption&&styles.modalCloseIconAlign)}>
                     {props.caption}
-                    <Link to={"/"}><CloseIcon type="primary" onClick={handleClose}/></Link>
+                    <CloseIcon type="primary" onClick={handleClose}/>
                 </div>
                 {props.children}
             </div>

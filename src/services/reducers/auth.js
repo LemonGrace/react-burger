@@ -25,7 +25,7 @@ export const user = (state = initialStateUser, action) => {
         }
         case USER_REQUEST_SUCCESS: {
             return {
-                ...state, username: action.user.name, email: action.user.email,
+                username: action.user.name, email: action.user.email,
                 isUserLoading: false, isUserRequestFailed: false, isAuth: true
             };
         }
@@ -57,7 +57,7 @@ const initialStateResetPassword = {
     isRequestLoading: false,
     isRequestFailed: false,
     isEmailSend: false,
-    isPasswordReset: true
+    isPasswordReset: false
 }
 export const resetPassword = (state = initialStateResetPassword, action) => {
     switch (action.type) {
