@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from "./app-header.module.css";
 import {BurgerIcon, ListIcon, ProfileIcon, Logo} from '@ya.praktikum/react-developer-burger-ui-components'
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {useRouteMatch} from 'react-router-dom';
 
 function AppHeader() {
@@ -20,7 +20,7 @@ function AppHeader() {
                 <ul className={clsx("mt-4 mb-4 pt-4 pb-4", styles.ulLeft, styles.ul)}>
                     <NavLink to={'/'}
                              exact={true}
-                             activeClassName={styles.active2}
+                             activeClassName={styles.active}
                              className={clsx(styles.li, "text_type_main-default mr-2 pl-5 pr-5 text_color_inactive")}
                     >
                         <BurgerIcon type={isMainPageActive ? "primary" : "secondary"}/>
@@ -28,7 +28,7 @@ function AppHeader() {
                     </NavLink>
                     <NavLink to={'/'}
                              exact={true}
-                             activeClassName={styles.active2} 
+                             activeClassName={styles.active}
                              className={clsx(styles.li, "text_type_main-default pl-5 pr-5 text_color_inactive")}
                     >
                         <ListIcon type={isHistoryOrderPageActive ? "primary" : "secondary"}/>
@@ -38,7 +38,7 @@ function AppHeader() {
                 <div className={clsx("mt-4 mb-4", styles.logo)}><Logo/></div>
                 <ul className={clsx("mt-4", "mb-4", "pt-4", "pb-4", styles.ulRight, styles.ul)}>
                     <NavLink to={'/profile'}
-                             activeClassName={styles.active2}
+                             activeClassName={styles.active}
                              className={clsx(styles.li, "text_type_main-default pl-5 pr-5 text_color_inactive")}
                     >
                         <ProfileIcon type={isProfilePageActive ? "primary" : "secondary"}/>

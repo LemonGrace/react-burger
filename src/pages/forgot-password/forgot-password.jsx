@@ -18,7 +18,7 @@ function ForgotPasswordPage() {
 
     /** Отправка письма на почту */
     const dispatch = useDispatch();
-    let reset = useCallback(
+    const reset = useCallback(
         e => {
             e.preventDefault();
             dispatch(resetPasswordEmail(form));

@@ -10,13 +10,50 @@ import {
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDispatch, useSelector} from "react-redux";
-import {SET_TYPE, SET_VISIBLE} from "../../services/actions/modal";
+import {openModal, SET_TYPE, SET_VISIBLE} from "../../services/actions/modal";
 import {DELETE_INGREDIENT} from "../../services/actions/details";
 import {useDrag, useDrop} from "react-dnd";
-import {ADD_INGREDIENT, DEFAULT, getOrder, REORDER, REPLACE_BUN} from "../../services/actions/constructor";
+import {ADD_INGREDIENT, DEFAULT, REORDER, REPLACE_BUN} from "../../services/actions/constructor";
 import { useHistory } from 'react-router-dom';
-import {getCookie} from "../../utils/cookie";
 
+
+/** Карточка отдельного инг. для реализации dnd */
+const DraggableCard = ({item}) => {
+    const dispatch = useDispatch();
+    const ref = useRef(null)
+    /** Обработка перетаскивания карточки */
+    const [, dragRef] = useDrag({
+        type: "constructor",
+        item: item,
+    });
+    let hoverIndex;
+    const [, dropTarget] = useDrop({
+        accept: "constructor",
+        drop(itemDrag) {
+            dispatch({type: REORDER, from: itemDrag.order, to: hoverIndex});
+        },
+        hover(itemDrag) {
+            hoverIndex = item.order;
+        }
+    });
+    dragRef(dropTarget(ref));
+    const handleClose = () => {
+        dispatch({type: DELETE_INGREDIENT, id: item.ingredient._id, order: item.order})
+    }
+    return (
+        <div className={clsx(styles.container, "mr-2 ml-4 mt-4")}>
+            <DragIcon type="primary" />
+            <div className={clsx(styles.itemCard, "ml-2")} ref={ref}>
+                <ConstructorElement
+                    text={item.ingredient.name}
+                    price={item.ingredient.price}
+                    thumbnail={item.ingredient.image}
+                    handleClose={handleClose}
+                />
+            </div>
+        </div>
+    )
+}
 
 function BurgerConstructor() {
     const content = useSelector(state => state.order.content);
@@ -56,41 +93,6 @@ function BurgerConstructor() {
 
     /** Секция с выбранными ингредиентами */
     const IngredientSection = useMemo(() => {
-        /** Карточка отдельного инг. для реализации dnd */
-        const DraggableCard = ({item}) => {
-            const ref = useRef(null)
-            /** Обработка перетаскивания карточки */
-            const [, dragRef] = useDrag({
-                type: "constructor",
-                item: item,
-            });
-            let hoverIndex;
-            const [, dropTarget] = useDrop({
-                accept: "constructor",
-                drop(itemDrag) {
-                    dispatch({type: REORDER, from: itemDrag.order, to: hoverIndex});
-                },
-                hover(itemDrag) {
-                    hoverIndex = item.order;
-                }
-            });
-            dragRef(dropTarget(ref));
-            return (
-                <div className={clsx(styles.container, "mr-2 ml-4 mt-4")}>
-                    <DragIcon type="primary" />
-                    <div className={clsx(styles.itemCard, "ml-2")} ref={ref}>
-                        <ConstructorElement
-                            text={item.ingredient.name}
-                            price={item.ingredient.price}
-                            thumbnail={item.ingredient.image}
-                            handleClose={() => {
-                                dispatch({type: DELETE_INGREDIENT, id: item.ingredient._id, order: item.order})
-                            }}
-                        />
-                    </div>
-                </div>
-            )
-        }
         return (
             <div className={clsx(styles.menuContainer)}>
                 {ingredients.sort((a, b) => a.order - b.order).map((item) => {
@@ -116,10 +118,18 @@ function BurgerConstructor() {
 
     /**Реализация переадресации, если нет данных об авторизации*/
     const history = useHistory();
-    const isAuth = !!getCookie('token');
+    const {isAuth} = useSelector(state => state.user);
 
     /** Подсветка области, если мало или вообще нет элементов в заказе */
     const needShowDrop = content.length < 3 ? isHover ? styles.canDrop : "" : "";
+
+    const handleClick = () => {
+        if (isAuth) {
+            dispatch(openModal(content));
+        } else {
+            history.push("/login");
+        }
+    }
     return (
         <section className={clsx(styles.section, "mt-25", needShowDrop)} ref={dropTarget}>
             {content && bun &&
@@ -156,15 +166,7 @@ function BurgerConstructor() {
                         <CurrencyIcon type="primary"/>
                     </span>
                 </div>
-                <Button type="primary" size="medium" onClick={() => {
-                    if (isAuth) {
-                        dispatch({type: SET_VISIBLE});
-                        dispatch({type: SET_TYPE, modalType: "order"});
-                        dispatch(getOrder(content));
-                    } else {
-                        history.push("/login");
-                    }
-                }}>
+                <Button type="primary" size="medium" onClick={handleClick}>
                     Оформить заказ
                 </Button>
             </div>

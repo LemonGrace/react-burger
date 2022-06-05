@@ -7,9 +7,6 @@
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 4;
-}
-
-.modalInner {
     background-color: #1C1C21;
     border: 1px solid rgba(76, 76, 255, 0.2);
     box-sizing: border-box;
@@ -22,6 +19,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.modalCenter {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .modalCloseIconAlign {

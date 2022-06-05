@@ -1,139 +1,81 @@
-import {
-    CREATE_USER_ERROR,
-    CREATE_USER_REQUEST,
-    CREATE_USER_SUCCESS, DELETE_USER,
-    EMAIL_ERROR,
-    EMAIL_REQUEST,
-    EMAIL_SUCCESS,
-    LOGIN_ERROR,
-    LOGIN_REQUEST,
-    LOGIN_SUCCESS,
-    RESET_PASSWORD_ERROR,
-    RESET_PASSWORD_REQUEST,
-    RESET_PASSWORD_SUCCESS,
-    SET_USER, UPDATE_ERROR, UPDATE_REQUEST,
-    USER_ERROR,
-    USER_REQUEST
-} from "../actions/auth";
-
+export const USER_REQUEST_LOADING = 'USER_REQUEST_LOADING';
+/** Используем для удаления записи о существующем пользователе при ошибках в запросах register + login + user */
+export const USER_REQUEST_ERROR = 'USER_REQUEST_ERROR';
+/** Используем для сохранения информации о существующем пользователе, если обновление или выход не удался */
+export const USER_UPDATE_REQUEST_ERROR = 'USER_UPDATE_REQUEST_ERROR';
+export const USER_LOGOUT_REQUEST_ERROR = 'USER_LOGOUT_REQUEST_ERROR';
+/** При логине и регистрации записываем вместо пустых данных , при обновлении перезаписываем */
+export const USER_REQUEST_SUCCESS = 'USER_REQUEST_SUCCESS';
+/** Удаление пользователя при выходе из профиля */
+export const USER_LOGOUT_REQUEST_SUCCESS = 'USER_LOGOUT_REQUEST_SUCCESS';
 
 /** Данные о пользователе */
 const initialStateUser = {
-    user: {
-        email: "",
-        name: ""
-    },
-    userInfoRequest: false,
-    userInfoFailed: false,
-    updateRequest: false,
-    updateFailed: false,
-    logoutRequest: false,
-    logoutFailed: false
+    username: "",
+    email: "",
+    isUserLoading: false,
+    isUserRequestFailed: false,
+    isAuth: false,
 }
+
 export const user = (state = initialStateUser, action) => {
     switch (action.type) {
-        case USER_REQUEST: {
-            return {...state, userInfoRequest: true};
+        case USER_REQUEST_LOADING: {
+            return {...state, isUserLoading: true};
         }
-        case UPDATE_REQUEST: {
-            return {...state, updateRequest: true};
+        case USER_REQUEST_SUCCESS: {
+            return {
+                ...state, username: action.user.name, email: action.user.email,
+                isUserLoading: false, isUserRequestFailed: false, isAuth: true
+            };
         }
-        case LOGIN_REQUEST: {
-            return {...state, logoutRequest: true};
+        case USER_REQUEST_ERROR: {
+            return {...state, username: "", email: "",isUserRequestFailed: true, isUserLoading: false};
         }
-        case SET_USER: {
-            return { ...state, user: action.user, userInfoRequest: false, userInfoFailed: false,
-                updateRequest: false, updateFailed: false};
+        case USER_UPDATE_REQUEST_ERROR:
+        case USER_LOGOUT_REQUEST_ERROR: {
+            return {...state, isUserRequestFailed: true}
         }
-        case DELETE_USER: {
-            return { ...state, user: {
-                    email: "",
-                    name: ""
-                }, userInfoRequest: false, userInfoFailed: false,
-                updateRequest: false, updateFailed: false, logoutFailed: false, logoutRequest: false};
+        case USER_LOGOUT_REQUEST_SUCCESS: {
+            return initialStateUser;
         }
-        case LOGIN_ERROR: {
-            return { ...state, logoutFailed: true, logoutRequest: false };
-        }
-        case USER_ERROR: {
-            return { ...state, userInfoFailed: true, userInfoRequest: false };
-        }
-        case UPDATE_ERROR: {
-            return {...state, updateRequest: false, updateFailed: false}
-        }
-        
-        default: return state;
+        default:
+            return state;
     }
 }
 
-/** Редьюсер для работы с авторизацией*/
-const initialStateLogin = {
-    loginRequest: false,
-    loginFailed: false,
-}
-export const login = (state = initialStateLogin, action) => {
-    switch (action.type) {
-        case LOGIN_REQUEST: {
-            return {...state, loginRequest: true};
-        }
-        case LOGIN_SUCCESS: {
-            return { ...state, loginFailed: false, loginRequest: false };
-        }
-        case LOGIN_ERROR: {
-            return { ...state, loginFailed: true, loginRequest: false };
-        }
-        default: return state;
-    }
-}
 
-/** Редьюсер для работы с регистрацией*/
-const initialStateRegistration = {
-    createRequest: false,
-    createFailed: false,
-}
-export const registration = (state = initialStateRegistration, action) => {
-    switch (action.type) {
-        case CREATE_USER_REQUEST: {
-            return {...state, createRequest: true};
-        }
-        case CREATE_USER_SUCCESS: {
-            return { ...state, createFailed: false, createRequest: false };
-        }
-        case CREATE_USER_ERROR: {
-            return { ...state, createFailed: true, createRequest: false };
-        }
-        default: return state;
-    }
-}
-
+/** Восстановление пароля */
+export const EMAIL_REQUEST = 'EMAIL_REQUEST';
+export const EMAIL_SUCCESS = 'EMAIL_SUCCESS';
+export const EMAIL_ERROR = 'EMAIL_ERROR';
+export const RESET_PASSWORD_REQUEST = 'RESET_PASSWORD_REQUEST';
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS';
+export const RESET_PASSWORD_ERROR = 'RESET_PASSWORD_ERROR';
 
 const initialStateResetPassword = {
-    sendEmailRequest: false,
-    sendEmailFailed: false,
-    codeSuccessSend: false,
-    resetPasswordRequest: false,
-    resetPasswordFailed: false
+    isRequestLoading: false,
+    isRequestFailed: false,
+    isEmailSend: false,
+    isPasswordReset: true
 }
 export const resetPassword = (state = initialStateResetPassword, action) => {
     switch (action.type) {
-        case EMAIL_REQUEST: {
-            return {...state, sendEmailRequest: true};
+        case EMAIL_REQUEST:
+        case RESET_PASSWORD_REQUEST: {
+            return {...state, isRequestLoading: true};
+        }
+        case EMAIL_ERROR:
+        case RESET_PASSWORD_ERROR: {
+            return {...state, isRequestFailed: true, isRequestLoading: false};
         }
         case EMAIL_SUCCESS: {
-            return { ...state, codeSuccessSend: true, sendEmailRequest: false, sendEmailFailed: false };
-        }
-        case EMAIL_ERROR: {
-            return { ...state, sendEmailFailed: true, sendEmailRequest: false };
-        }
-        case RESET_PASSWORD_REQUEST: {
-            return {...state, resetPasswordRequest: true};
+            return {...state, isEmailSend: true, isRequestLoading: false, isRequestFailed: false};
         }
         case RESET_PASSWORD_SUCCESS: {
-            return { ...state, resetPasswordRequest: false, resetPasswordFailed: false };
+            return {...state, isPasswordReset: true, isRequestLoading: false, isRequestFailed: false};
         }
-        case RESET_PASSWORD_ERROR: {
-            return { ...state, resetPasswordFailed: true, resetPasswordRequest: false };
-        }
-        default: return state;
+        default:
+            return state;
     }
 }

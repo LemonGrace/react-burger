@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {burgerIngredient, ingredientDetails, modal, order} from './burger'
-import {user, login, registration, resetPassword} from "./auth";
+import {user, resetPassword} from "./auth";
 
 export const rootReducer = combineReducers({
     burgerIngredient,
@@ -8,7 +8,5 @@ export const rootReducer = combineReducers({
     modal,
     order,
     user,
-    login,
-    registration,
     resetPassword
 })

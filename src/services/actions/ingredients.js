@@ -4,7 +4,7 @@ export const INGREDIENTS_REQUEST = 'INGREDIENTS_REQUEST';
 export const INGREDIENTS_SUCCESS = 'INGREDIENTS_SUCCESS';
 export const INGREDIENTS_ERROR = 'INGREDIENTS_ERROR';
 
-export function getItems() {
+export function getIngredients() {
     return function(dispatch) {
         dispatch({
             type: INGREDIENTS_REQUEST

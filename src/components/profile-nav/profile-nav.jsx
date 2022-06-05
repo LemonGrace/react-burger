@@ -1,7 +1,7 @@
-import React, {useCallback, useState} from "react";
-import {NavLink} from "react-router-dom";
+import React, {useCallback} from "react";
+import {NavLink, useHistory} from "react-router-dom";
 import styles from "./profile-nav.module.css";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import clsx from "clsx";
 import {logout} from "../../services/actions/auth";
 
@@ -9,9 +9,14 @@ import {logout} from "../../services/actions/auth";
 function ProfileNav() {
 
     const dispatch = useDispatch();
-    let logoutUser = useCallback(e => {
+    const history = useHistory();
+    const {username, email} = useSelector(state => state.user);
+    const logoutUser = useCallback(e => {
         e.preventDefault();
         dispatch(logout())
+        if (!username && !email) {
+            history.replace("/login");
+        }
     }, [dispatch])
     
     

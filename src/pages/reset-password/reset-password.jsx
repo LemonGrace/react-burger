@@ -29,7 +29,7 @@ function PasswordResetPage() {
 
     /** Установка нового пароля */
     const dispatch = useDispatch();
-    let reset = useCallback(
+    const reset = useCallback(
         e => {
             e.preventDefault();
             deleteCookie('emailResetSend');

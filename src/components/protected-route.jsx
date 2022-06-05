@@ -1,31 +1,36 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {Route, Redirect, useHistory, useLocation, useRouteMatch} from 'react-router-dom';
-import {getCookie} from "../utils/cookie";
+import {Route, Redirect} from 'react-router-dom';
 
-function ProtectedRoute({ children, ...rest }) {
-    /** Получение данных об авторизации */
-    const isAuth = !!getCookie('token');
-    const location = useLocation();
-    console.log(location)
+function ProtectedRoute({isForAuthUser = false, children, ...rest}) {
 
-    /** Если еще не подгрузились данные, но ничего не делать */
-    const {loginRequest} = useSelector(state => state.login);
-    if (loginRequest) {
-        return null;
+    const {isAuth, isUserLoading} = useSelector(state => state.user);
+
+    // TODO: сделать на следующей неделе лоудер!
+    if (isUserLoading) {
+        return (
+            <div>Loading</div>
+        )
     }
-    return (
-        <Route
-            {...rest}
-            render={({location}) =>
-                isAuth ? (children) : (
-                    <Redirect to={{
-                        pathname: '/login',
-                        state: {from: location},
-                    }}/>
-                )
-            }
-        />
-    );
+
+    if (isForAuthUser) {
+        return (
+            <Route
+                {...rest}
+                render={({location}) => (isAuth) ?
+                    (children) : (<Redirect to={{
+                    pathname: '/login', state: {from: location},
+                }}/>)}
+            />
+        );
+    } else {
+        return (
+            <Route
+                {...rest}
+                render={({}) => !isAuth ? (children) : (<Redirect to={{pathname: '/'}}/>)}
+            />
+        );
+    }
 }
+
 export default ProtectedRoute;

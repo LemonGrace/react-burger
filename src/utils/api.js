@@ -1,6 +1,5 @@
 import {authUrl, BaseUrl} from "./baseUrl";
 import {getCookie, setCookie} from "./cookie";
-import {bool} from "prop-types";
 
 export function checkResponse(response) {
     if (!response.ok) {
@@ -139,7 +138,6 @@ const updateToken = async () => {
 }
 /** Запрос данных по токену */
 export const getUserInfo = async () => {
-    //console.log("here")
     const url = authUrl + "user";
     try {
         const response = await fetch(url, {

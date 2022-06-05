@@ -1,6 +1,5 @@
 import {INGREDIENTS_REQUEST, INGREDIENTS_SUCCESS, INGREDIENTS_ERROR} from "../actions/ingredients";
 import {DELETE_INGREDIENT, SET_INGREDIENT } from "../actions/details";
-import {DELETE_TYPE, DELETE_VISIBLE, SET_INTERNAL, SET_TYPE, SET_VISIBLE} from "../actions/modal";
 import {
     ADD_INGREDIENT,
     CREATE_ORDER_ERROR,
@@ -8,27 +7,28 @@ import {
     CREATE_ORDER_SUCCESS, DEFAULT, DELETE_ORDER, REORDER,
     REPLACE_BUN
 } from "../actions/constructor";
+import {DATA} from "../../utils/data";
 
 
 /** редьюсер для загрузки данных */
 const initialState = {
-    ingredients: [],
-    itemsRequest: false,
-    itemsFailed: false,
+    ingredients: DATA,
+    isIngredientsLoading: false,
+    isIngredientsFailed: false,
 }
 export const burgerIngredient = (state = initialState, action) => {
     switch (action.type) {
         case INGREDIENTS_REQUEST: {
             return {
                 ...state,
-                itemsRequest: true
+                isIngredientsLoading: true
             };
         }
         case INGREDIENTS_SUCCESS: {
-            return { ...state, itemsFailed: false, ingredients: action.items, itemsRequest: false };
+            return { ...state, isIngredientsFailed: false, ingredients: action.items, isIngredientsLoading: false };
         }
         case INGREDIENTS_ERROR: {
-            return { ...state, itemsFailed: true, itemsRequest: false };
+            return { ...state, isIngredientsFailed: true, isIngredientsLoading: false };
         }
         default: return state;
     }
@@ -58,6 +58,13 @@ export const ingredientDetails = (state = initialStateSelectedItem, action) => {
 }
 
 /** редьюсер для работы с модальным окном */
+
+export const SET_VISIBLE = 'SET_VISIBLE';
+export const SET_INTERNAL = 'SET_INTERNAL';
+export const DELETE_VISIBLE = 'DELETE_VISIBLE';
+export const SET_TYPE = 'SET_TYPE';
+export const DELETE_TYPE = 'DELETE_TYPE';
+
 const initialStateModal = {
     isVisible: false,
     isInternalLink: false,
