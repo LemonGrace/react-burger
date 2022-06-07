@@ -16,6 +16,7 @@ const initialStateUser = {
     isUserLoading: false,
     isUserRequestFailed: false,
     isAuth: false,
+    test: false,
 }
 
 export const user = (state = initialStateUser, action) => {
@@ -30,7 +31,9 @@ export const user = (state = initialStateUser, action) => {
             };
         }
         case USER_REQUEST_ERROR: {
-            return {...state, username: "", email: "",isUserRequestFailed: true, isUserLoading: false};
+            const initialState = Object.assign({}, initialStateUser);
+            initialState.isUserRequestFailed = true;
+            return initialState;
         }
         case USER_UPDATE_REQUEST_ERROR:
         case USER_LOGOUT_REQUEST_ERROR: {

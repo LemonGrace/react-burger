@@ -166,7 +166,7 @@ function BurgerConstructor() {
                         <CurrencyIcon type="primary"/>
                     </span>
                 </div>
-                <Button type="primary" size="medium" onClick={handleClick}>
+                <Button type="primary" size="medium" disabled={content.length < 1} onClick={handleClick}>
                     Оформить заказ
                 </Button>
             </div>

@@ -152,7 +152,7 @@ export const getUserInfo = async () => {
             redirect: 'follow',
             referrerPolicy: 'no-referrer'
         });
-        checkResponse(response)
+        checkResponse(response);
         return response.json();
     }
     catch (e) {
