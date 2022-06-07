@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react";
-import {deleteCookie, getCookie} from "../../utils/cookie";
+import {deleteCookie} from "../../utils/cookie";
 import {useDispatch, useSelector} from "react-redux";
 import {Link, Redirect, useHistory, useLocation} from "react-router-dom";
 import clsx from "clsx";

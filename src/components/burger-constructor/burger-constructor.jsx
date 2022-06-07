@@ -10,7 +10,7 @@ import {
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDispatch, useSelector} from "react-redux";
-import {openModal, SET_TYPE, SET_VISIBLE} from "../../services/actions/modal";
+import {openModal} from "../../services/actions/modal";
 import {DELETE_INGREDIENT} from "../../services/actions/details";
 import {useDrag, useDrop} from "react-dnd";
 import {ADD_INGREDIENT, DEFAULT, REORDER, REPLACE_BUN} from "../../services/actions/constructor";
@@ -102,7 +102,7 @@ function BurgerConstructor() {
                 })}
             </div>
         );
-    }, [ingredients, dispatch]);
+    }, [ingredients]);
 
     /** Обработка броска карточки */
     const [{isHover}, dropTarget] = useDrop({

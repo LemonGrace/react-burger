@@ -3,7 +3,7 @@ import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
 import clsx from "clsx";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
-import { useSelector, useDispatch  } from 'react-redux';
+import { useSelector  } from 'react-redux';
 import {Ingredient} from "../../utils/type";
 import {useDrag} from "react-dnd";
 import {useHistory, useLocation} from "react-router-dom";
@@ -137,13 +137,13 @@ function BurgerIngredients() {
     const TabChoose = () => {
         return (
             <div className={clsx(styles.tab, "mb-10")}>
-                <Tab value="bun" active={current === 'bun'} onClick={(value) => scrollTo(value)}>
+                <Tab value="bun" active={current === 'bun'} onClick={scrollTo}>
                     Булки
                 </Tab>
-                <Tab value="sauce" active={current === 'sauce'} onClick={(value) => scrollTo(value)}>
+                <Tab value="sauce" active={current === 'sauce'} onClick={scrollTo}>
                     Соусы
                 </Tab>
-                <Tab value="main" active={current === 'main'} onClick={(value) => scrollTo(value)}>
+                <Tab value="main" active={current === 'main'} onClick={scrollTo}>
                     Начинки
                 </Tab>
             </div>
@@ -154,7 +154,7 @@ function BurgerIngredients() {
         <section className={clsx(styles.section, "mr-10")}>
             <h1 className="text text_type_main-large pt-10 pb-5">Соберите бургер</h1>
             <TabChoose/>
-            <div className={styles.menuContainer} onScroll={(event => {scrollPosition(event)})}>
+            <div className={styles.menuContainer} onScroll={scrollPosition}>
                 <IngredientsSection
                     ingredients={bunArray}
                     caption={"Булки"}

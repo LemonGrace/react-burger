@@ -11,18 +11,24 @@ const ProfileData = () => {
     /** Получение и сохранение данных о пользователе*/
     const dispatch = useDispatch();
     const {username, email, isAuth, isUserLoading} = useSelector(state => state.user);
-    //
+
     if (!username && !email && isAuth) {
         if (!isUserLoading) dispatch(getUser());
     }
 
-    const [form, setValue] = React.useState({name: username, email: email, password: ''});
+    /** Инициализация формы*/
+    const initialState = {
+        name: username,
+        email: email,
+        password: "",
+    }
+    const [form, setValue] = React.useState(initialState);
     const onChange = e => {
         setValue({...form, [e.target.name]: e.target.value});
     };
     /** Возвращение к исходному состоянию */
     const resetForm = () => {
-        setValue({...form, name: username, email: email})
+        setValue(initialState);
     }
     /** Обновление данных */
     const update = useCallback(

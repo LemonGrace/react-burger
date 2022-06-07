@@ -15,7 +15,6 @@ import {useDispatch, useSelector} from "react-redux";
 import styles from '../modal/modal.module.css';
 import clsx from "clsx";
 import {getUser} from "../../services/actions/auth";
-import Loading from "../loading/loading";
 
 
 const Main = () => {
@@ -50,10 +49,8 @@ const Main = () => {
                 </ProtectedRoute>
             </Switch>
             {
-                background && (<Route path="/ingredients/:id"
-                render={() => (
+                background && (<Route path="/ingredients/:id">
                     <Modal caption={"Детали игредиента"}><IngredientDetails/></Modal>
-                )}>
                 </Route>)
             }
         </>
