@@ -11,7 +11,11 @@ import Loading from "../../components/loading/loading";
 function PasswordResetPage() {
 
     /** Форма для отправки на бэк */
-    const [form, setValue] = useState({ password: '', token: ''});
+    const initialState = {
+        password: '',
+        token: ''
+    }
+    const [form, setValue] = useState(initialState);
 
     const onChange = e => {
         setValue({ ...form, [e.target.name]: e.target.value });

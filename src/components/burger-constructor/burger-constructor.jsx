@@ -84,7 +84,7 @@ function BurgerConstructor() {
     const dispatch = useDispatch();
     const {orderRequest, orderFailed} = useSelector(state => state.order);
     /** Получение статуса видимости модалки */
-    const {isVisible, type} = useSelector(state => state.modal);
+    const {isVisible} = useSelector(state => state.modal);
     /** Создание уникальных ключей */
     function uID() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
@@ -155,7 +155,7 @@ function BurgerConstructor() {
                 />
             </div>
             }
-            {isVisible && type === "order" && !orderRequest && !orderFailed &&
+            {isVisible && !orderRequest && !orderFailed &&
             <Modal caption={""}>
                 <OrderDetails/>
             </Modal>}

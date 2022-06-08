@@ -17,7 +17,7 @@ function ProfileNav() {
         if (!username && !email) {
             history.replace("/login");
         }
-    }, [dispatch])
+    }, [dispatch, history, email, username])
     
     
     return (

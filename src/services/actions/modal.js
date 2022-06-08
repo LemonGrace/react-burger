@@ -1,5 +1,5 @@
 import {DELETE_ORDER, getOrder} from "./constructor";
-import {DELETE_TYPE, DELETE_VISIBLE, SET_TYPE, SET_VISIBLE} from "../reducers/burger";
+import {DELETE_VISIBLE, SET_VISIBLE} from "../reducers/burger";
 
 export function openModal(content) {
     return function (dispatch) {

@@ -15,7 +15,10 @@ function ForgotPasswordPage() {
     const history = useHistory();
 
     /** Форма для отправки на бэк */
-    const [form, setValue] = useState({ email: '' });
+    const initialState = {
+        email: ''
+    }
+    const [form, setValue] = useState(initialState);
 
     const onChange = e => {
         setValue({ ...form, [e.target.name]: e.target.value });

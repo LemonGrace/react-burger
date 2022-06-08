@@ -7,7 +7,13 @@ import {useDispatch} from "react-redux";
 import {enter} from "../../services/actions/auth";
 
 function LoginPage() {
-    const [form, setValue] = useState({email: '', password: ''});
+
+    /** Форма для отправки на бэк */
+    const initialState = {
+        email: '',
+        password: ''
+    }
+    const [form, setValue] = useState(initialState);
     const onChange = e => {
         setValue({...form, [e.target.name]: e.target.value});
     };
