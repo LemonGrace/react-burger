@@ -6,6 +6,7 @@ import clsx from "clsx";
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import {resetPasswordEmail} from "../../services/actions/auth";
 import Loading from "../../components/loading/loading";
+import Error from "../../components/error/error";
 
 function ForgotPasswordPage() {
 
@@ -42,9 +43,12 @@ function ForgotPasswordPage() {
             });
         }
     }, [history, canGoToNextStep])
-    // TODO: в свободное время добавить обработку ошибки
+
     if (isRequestLoading) {
         return (<Loading/>)
+    }
+    if (isRequestFailed) {
+        return (<Error/>);
     }
 
     return (

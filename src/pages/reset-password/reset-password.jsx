@@ -7,6 +7,7 @@ import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components"
 import styles from './reset-password.module.css'
 import {resetPassword} from "../../services/actions/auth";
 import Loading from "../../components/loading/loading";
+import Error from "../../components/error/error";
 
 function PasswordResetPage() {
 
@@ -51,9 +52,12 @@ function PasswordResetPage() {
             <Redirect to={"/"}/>
         )
     }
-    // TODO: в свободное время добавить обработку ошибки
+
     if (isRequestLoading) {
-        return (<Loading/>)
+        return (<Loading/>);
+    }
+    if (isRequestFailed) {
+        return (<Error/>);
     }
 
     return (
@@ -63,9 +67,9 @@ function PasswordResetPage() {
                 <Input
                     onChange={onChange}
                     value={form.password}
-                    name={'password'}
-                    placeholder={"Введите новый пароль"}
-                    icon={'ShowIcon'}
+                    name="password"
+                    placeholder="Введите новый пароль"
+                    icon="ShowIcon"
                 />
             </div>
             <div className={"mb-6"}>

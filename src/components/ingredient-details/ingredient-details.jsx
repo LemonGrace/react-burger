@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from "react-router-dom";
 import {getIngredients} from "../../services/actions/ingredients";
 import Loading from "../loading/loading";
+import Error from "../error/error";
 
 function IngredientDetails() {
     const {ingredients, isIngredientsLoading, isIngredientsFailed} = useSelector((state) => state.burgerIngredient);
@@ -15,9 +16,13 @@ function IngredientDetails() {
         dispatch(getIngredients());
     }, [dispatch])
 
-    if (isIngredientsLoading || isIngredientsFailed || ingredients.length < 1) {
+    if (isIngredientsLoading || ingredients.length < 1) {
         return (<Loading/>);
     }
+    if (isIngredientsFailed) {
+        return (<Error/>);
+    }
+
     const ingredientSelected = ingredients.find(item => item._id === id);
     return (
         <div className={styles.detailsContainer}>

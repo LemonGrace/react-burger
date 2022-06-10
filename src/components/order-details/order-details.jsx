@@ -2,10 +2,21 @@ import React from 'react';
 import styles from './order-details.module.css'
 import doneImagePath from '../../images/done.png';
 import clsx from "clsx";
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+import Loading from "../loading/loading";
+import Error from "../error/error";
 
-function OrderDetails(){
-    const order = useSelector(state => state.order.order);
+function OrderDetails() {
+    /** Получение данных о заказе */
+    const {order, orderRequest, orderFailed} = useSelector(state => state.order);
+
+    if (orderRequest) {
+        return (<Loading/>);
+    }
+    if (orderFailed) {
+        return (<Error/>);
+    }
+
     return (
         <div className={styles.detailsContainer}>
             <p className={clsx("mb-4 mt-4 text_type_digits-large", styles.orderNumber)}>{order}</p>
@@ -18,4 +29,5 @@ function OrderDetails(){
         </div>
     )
 }
+
 export default OrderDetails;

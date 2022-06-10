@@ -82,7 +82,6 @@ function BurgerConstructor() {
 
     /** Работа со статусом заказа и модальным окном */
     const dispatch = useDispatch();
-    const {orderRequest, orderFailed} = useSelector(state => state.order);
     /** Получение статуса видимости модалки */
     const {isVisible} = useSelector(state => state.modal);
     /** Создание уникальных ключей */
@@ -155,7 +154,7 @@ function BurgerConstructor() {
                 />
             </div>
             }
-            {isVisible && !orderRequest && !orderFailed &&
+            {isVisible &&
             <Modal caption={""}>
                 <OrderDetails/>
             </Modal>}
