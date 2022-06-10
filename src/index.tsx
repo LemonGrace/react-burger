@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import {rootReducer} from './services/reducers/index'
 import {applyMiddleware, compose, createStore} from "@reduxjs/toolkit";
 import thunk from 'redux-thunk';
-
 declare global {
     interface Window {
         __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -19,10 +18,9 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-      <Provider store={store}>
-          <App />
-      </Provider>
-  </React.StrictMode>
+    /** StrictMode с React 18.0.0 и react-router v5 блокирует работу Link */
+        <Provider store={store}>
+            <App />
+        </Provider>
 );
 

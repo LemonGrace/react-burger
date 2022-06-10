@@ -25,6 +25,7 @@
 .li {
     display: flex;
     align-items: center;
+    text-decoration: none;
 }
 
 .logo {
@@ -39,4 +40,8 @@
 .ulRight {
     position: absolute;
     right: -20px;
+}
+
+.active {
+    color: #F2F2F3;
 }

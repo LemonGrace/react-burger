@@ -3,16 +3,12 @@ import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
 import clsx from "clsx";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import Modal from "../modal/modal";
-import { useSelector, useDispatch  } from 'react-redux';
-import {SET_INGREDIENT} from "../../services/actions/details";
-import { SET_TYPE, SET_VISIBLE } from "../../services/actions/modal";
+import { useSelector  } from 'react-redux';
 import {Ingredient} from "../../utils/type";
 import {useDrag} from "react-dnd";
+import {useHistory, useLocation} from "react-router-dom";
 
 const DraggableCard = ({item}) => {
-    const dispatch = useDispatch();
     /** Получение данных о выбранных ингредиентах и подсчет их количества*/
     const content = useSelector(state => state.order.content);
     const count = useMemo(() => {
@@ -31,13 +27,18 @@ const DraggableCard = ({item}) => {
         type: "ingredients",
         item: item,
     });
+    const history = useHistory();
+    const location = useLocation();
+    const handleClick = () => {
+        history.push({
+            pathname: `/ingredients/${item._id}`,
+            state: { background: location },
+        });
+    }
+
     return (
         <div className={clsx(styles.ingredientsSectionContainer, "mt-6")}
-             onClick={() => {
-                 dispatch({type: SET_INGREDIENT, item});
-                 dispatch({type: SET_VISIBLE});
-                 dispatch({type: SET_TYPE, modalType: "details"});
-             }} ref={dragRef}>
+             onClick={handleClick} ref={dragRef}>
             {
                 count.find(value => item._id === value.item._id) &&
                 <Counter count={count.find(value => item.name === value.item.name).count} size="default" />
@@ -72,7 +73,7 @@ const IngredientsSection = React.forwardRef((props, ref) => {
 })
 
 
-function WrappedComponent() {
+function BurgerIngredients() {
     const burgerData = useSelector(state => state.burgerIngredient.ingredients);
     /** Сохрание данных по разделам */
     const bunArray = useMemo(() => {
@@ -85,9 +86,6 @@ function WrappedComponent() {
         return burgerData.filter(item => item.type === "main");
     }, [burgerData]);
 
-    /** Получение статуса видимости модалки */
-    const {isVisible, type} = useSelector(state => state.modal);
-
     /** Табло навигации */
     const [current, setCurrent] = React.useState('bun');
     /** Изменение активной секции */
@@ -95,6 +93,7 @@ function WrappedComponent() {
     const refSauce = useRef(null);
     const refMain = useRef(null);
     const scrollPosition = (e) => {
+        e.preventDefault();
         // Сеттим булочку, только есть разница меньше чем с соусами
         if (Math.abs(e.target.scrollTop - refBun.current.offsetTop)
             < Math.abs(e.target.scrollTop - refSauce.current.offsetTop)) {
@@ -114,16 +113,37 @@ function WrappedComponent() {
         }
     }
 
+    const scrollTo = (value) => {
+        setCurrent(value);
+        switch (value) {
+            case "bun": {
+                refBun.current.scrollIntoView();
+                break;
+            }
+            case "sauce": {
+                refSauce.current.scrollIntoView();
+                break;
+            }
+            case "main": {
+                refMain.current.scrollIntoView();
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+
     const TabChoose = () => {
         return (
             <div className={clsx(styles.tab, "mb-10")}>
-                <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
+                <Tab value="bun" active={current === 'bun'} onClick={scrollTo}>
                     Булки
                 </Tab>
-                <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
+                <Tab value="sauce" active={current === 'sauce'} onClick={scrollTo}>
                     Соусы
                 </Tab>
-                <Tab value="main" active={current === 'main'} onClick={setCurrent}>
+                <Tab value="main" active={current === 'main'} onClick={scrollTo}>
                     Начинки
                 </Tab>
             </div>
@@ -134,12 +154,7 @@ function WrappedComponent() {
         <section className={clsx(styles.section, "mr-10")}>
             <h1 className="text text_type_main-large pt-10 pb-5">Соберите бургер</h1>
             <TabChoose/>
-            {isVisible && type === "details" &&
-            <Modal caption={"Детали ингредиента"}>
-                <IngredientDetails/>
-            </Modal>
-            }
-            <div className={styles.menuContainer} onScroll={(event => {scrollPosition(event)})}>
+            <div className={styles.menuContainer} onScroll={scrollPosition}>
                 <IngredientsSection
                     ingredients={bunArray}
                     caption={"Булки"}
@@ -159,8 +174,7 @@ function WrappedComponent() {
         </section>
     );
 }
-const BurgerIngredients = React.memo(WrappedComponent);
-export default BurgerIngredients;
+export default React.memo(BurgerIngredients);
 
 IngredientsSection.propTypes = {
     ingredients: PropTypes.arrayOf(Ingredient.isRequired).isRequired,
