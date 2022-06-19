@@ -4,14 +4,15 @@ import styles from "./profile-nav.module.css";
 import {useDispatch, useSelector} from "react-redux";
 import clsx from "clsx";
 import {logout} from "../../services/actions/auth";
+import {History} from "history";
 
 
 function ProfileNav() {
 
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const {username, email} = useSelector(state => state.user);
-    const logoutUser = useCallback(e => {
+    const dispatch: any = useDispatch();
+    const history: History = useHistory();
+    const {username, email}: {username: string, email: string} = useSelector(state => (state as any).user);
+    const logoutUser = useCallback((e: React.SyntheticEvent) => {
         e.preventDefault();
         dispatch(logout())
         if (!username && !email) {

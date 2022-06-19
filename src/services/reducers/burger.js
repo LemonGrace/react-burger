@@ -7,7 +7,6 @@ import {
     CREATE_ORDER_SUCCESS, DEFAULT, DELETE_ORDER, REORDER,
     REPLACE_BUN
 } from "../actions/constructor";
-import {DATA} from "../../utils/data";
 
 
 /** редьюсер для загрузки данных */

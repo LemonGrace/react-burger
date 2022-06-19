@@ -6,11 +6,16 @@ import {useParams} from "react-router-dom";
 import {getIngredients} from "../../services/actions/ingredients";
 import Loading from "../loading/loading";
 import Error from "../error/error";
+import {IIngredient} from "../../utils/type";
 
 function IngredientDetails() {
-    const {ingredients, isIngredientsLoading, isIngredientsFailed} = useSelector((state) => state.burgerIngredient);
-    const {id} = useParams()
-    const dispatch = useDispatch();
+    // TODO Redux
+    const {ingredients, isIngredientsLoading, isIngredientsFailed}:
+        { ingredients: Array<IIngredient>, isIngredientsLoading: boolean, isIngredientsFailed: boolean } =
+        useSelector((state) => (state as any).burgerIngredient);
+
+    const {id}: {id: string} = useParams<{id: string}>();
+    const dispatch: any = useDispatch();
     /** Получение всех ингредиентов*/
     React.useEffect(() => {
         dispatch(getIngredients());
@@ -23,7 +28,8 @@ function IngredientDetails() {
         return (<Error/>);
     }
 
-    const ingredientSelected = ingredients.find(item => item._id === id);
+    //@ts-ignore // TODO Redux
+    const ingredientSelected: IIngredient = ingredients.find(item => item._id === id);
     return (
         <div className={styles.detailsContainer}>
             <div>
