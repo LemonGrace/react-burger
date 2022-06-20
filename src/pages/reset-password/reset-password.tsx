@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {ChangeEvent, useCallback, useState} from "react";
 import {deleteCookie} from "../../utils/cookie";
 import {useDispatch, useSelector} from "react-redux";
 import {Link, Redirect, useHistory, useLocation} from "react-router-dom";
@@ -8,28 +8,36 @@ import styles from './reset-password.module.css'
 import {resetPassword} from "../../services/actions/auth";
 import Loading from "../../components/loading/loading";
 import Error from "../../components/error/error";
+import {History, Location} from "history";
+
+interface IResetPasswordFields {
+    password: string;
+    token: string;
+}
 
 function PasswordResetPage() {
 
     /** Форма для отправки на бэк */
-    const initialState = {
+    const initialState: IResetPasswordFields = {
         password: '',
         token: ''
     }
-    const [form, setValue] = useState(initialState);
+    const [form, setValue] = useState<IResetPasswordFields>(initialState);
 
-    const onChange = e => {
+    const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 
-    const {isRequestLoading, isRequestFailed, isPasswordReset} = useSelector(state => state.resetPassword);
-    const canGoToNextStep = !isRequestLoading && !isRequestFailed && isPasswordReset;
-    const history = useHistory();
+    const {isRequestLoading, isRequestFailed, isPasswordReset}:
+        { isRequestLoading: boolean, isRequestFailed: boolean, isPasswordReset: boolean }
+        = useSelector(state => (state as any).resetPassword);
+    const canGoToNextStep: boolean = !isRequestLoading && !isRequestFailed && isPasswordReset;
+    const history: History = useHistory();
 
     /** Установка нового пароля */
-    const dispatch = useDispatch();
+    const dispatch: any = useDispatch();
     const reset = useCallback(
-        e => {
+        (e: React.SyntheticEvent) => {
             e.preventDefault();
             deleteCookie('emailResetSend');
             dispatch(resetPassword(form));
@@ -46,8 +54,8 @@ function PasswordResetPage() {
     }, [history, canGoToNextStep])
 
     /** Получение данных о возможности доступа */
-    const location = useLocation();
-    if (!location.state && !location.state.emailHasChecked) {
+    const location: Location = useLocation();
+    if (!location.state && !(location.state as any).emailHasChecked) {
         return (
             <Redirect to={"/"}/>
         )
@@ -76,7 +84,9 @@ function PasswordResetPage() {
                 <Input onChange={onChange} value={form.token} name={'token'} placeholder={"Введите код из письма"}/>
             </div>
             <div className={"mb-20"}>
-                <Button type="primary" size="medium" onClick={form.submit}> Сохранить </Button>
+                <Button type="primary" size="medium" onClick={(form as unknown as HTMLFormElement).submit}>
+                    Сохранить
+                </Button>
             </div>
             <p className={clsx(styles.text, "text_type_main-default text_color_inactive")}>
                 Вспомнили пароль? <Link to={"/login"} className={styles.link}> Войти </Link>

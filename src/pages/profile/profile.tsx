@@ -66,7 +66,7 @@ const ProfileData = () => {
                 <p className={clsx("mr-7  text_type_main-small", styles.cancel)} onClick={resetForm}>
                     Отмена
                 </p>
-                {/*<Button type="primary" size="medium" onClick={update}> Сохранить </Button>*/}
+                <Button type="primary" size="medium" onClick={update}> Сохранить </Button>
             </div>
         </form>
     )

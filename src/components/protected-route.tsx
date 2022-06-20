@@ -2,7 +2,6 @@ import React, {FC, ReactNode } from "react";
 import {useSelector} from "react-redux";
 import {Route, Redirect} from 'react-router-dom';
 import Loading from "./loading/loading";
-import PropTypes from "prop-types";
 import {Location} from "history";
 
 interface IRedirectProps {
@@ -26,7 +25,8 @@ const MainPageRedirect:FC<IRedirectProps> = ({location}) => {
 };
 
 interface IProtectedRouteProps {
-    isForAuthUser: boolean,
+    path: string;
+    isForAuthUser?: boolean,
     children?: ReactNode;
 }
 

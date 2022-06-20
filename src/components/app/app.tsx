@@ -15,11 +15,12 @@ import {useDispatch, useSelector} from "react-redux";
 import styles from '../modal/modal.module.css';
 import clsx from "clsx";
 import {getUser} from "../../services/actions/auth";
+import {Location} from "history";
 
 
 const Main = () => {
-    const location = useLocation();
-    const background = location.state && location.state.background;
+    const location: Location  = useLocation();
+    const background: Location = location.state && (location.state as any).background;
     return (
         <>
             <Switch location={background || location}>
@@ -59,8 +60,9 @@ const Main = () => {
 
 function App() {
     /** Получение данных об авторизации */
-    const dispatch = useDispatch();
-    const {isAuth, isUserLoading} = useSelector(state => state.user);
+    const dispatch: any = useDispatch();
+    const {isAuth, isUserLoading}: {isAuth: boolean, isUserLoading: boolean}
+        = useSelector(state => (state as any).user);
     if (!isAuth && getCookie("token")) {
         if (!isUserLoading) dispatch(getUser());
     }

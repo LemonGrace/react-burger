@@ -11,8 +11,9 @@ import Loading from "../../components/loading/loading";
 
 function HomePage() {
     /** Получение данных об ингредиентах */
-    const {isIngredientsLoading, isIngredientsFailed} = useSelector((state) => state.burgerIngredient);
-    const dispatch = useDispatch();
+    const {isIngredientsLoading, isIngredientsFailed}: {isIngredientsLoading: boolean, isIngredientsFailed: boolean}
+        = useSelector((state) => (state as any).burgerIngredient);
+    const dispatch: any = useDispatch();
     React.useEffect(() => {
         dispatch(getIngredients());
     }, [dispatch])

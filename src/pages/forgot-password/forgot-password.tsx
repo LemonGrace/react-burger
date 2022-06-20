@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {ChangeEvent, useCallback, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Link, useHistory} from "react-router-dom";
 import styles from './forgot-password.module.css';
@@ -7,28 +7,35 @@ import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components"
 import {resetPasswordEmail} from "../../services/actions/auth";
 import Loading from "../../components/loading/loading";
 import Error from "../../components/error/error";
+import {History} from "history";
+
+interface IForgotPasswordFields {
+    email: string;
+}
 
 function ForgotPasswordPage() {
 
     /** Получение данных об успешной отправки кода на email и переадресация */
-    const {isRequestLoading, isRequestFailed, isEmailSend} = useSelector(state => state.resetPassword);
-    const canGoToNextStep = !isRequestLoading && !isRequestFailed && isEmailSend;
-    const history = useHistory();
+    const {isRequestLoading, isRequestFailed, isEmailSend}:
+        { isRequestLoading: boolean, isRequestFailed: boolean, isEmailSend: boolean }
+        = useSelector(state => (state as any).resetPassword);
+    const canGoToNextStep: boolean = !isRequestLoading && !isRequestFailed && isEmailSend;
+    const history: History = useHistory();
 
     /** Форма для отправки на бэк */
-    const initialState = {
+    const initialState: IForgotPasswordFields = {
         email: ''
     }
-    const [form, setValue] = useState(initialState);
+    const [form, setValue] = useState<IForgotPasswordFields>(initialState);
 
-    const onChange = e => {
+    const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 
     /** Отправка письма на почту */
-    const dispatch = useDispatch();
+    const dispatch: any = useDispatch();
     const reset = useCallback(
-        e => {
+        (e: React.SyntheticEvent): void => {
             e.preventDefault();
             dispatch(resetPasswordEmail(form));
         },
@@ -58,7 +65,9 @@ function ForgotPasswordPage() {
                 <Input onChange={onChange} value={form.email} name={'email'} placeholder={"Укажите e-mail"}/>
             </div>
             <div className={"mb-20"}>
-                <Button type="primary" size="medium" onClick={form.submit}> Восстановить </Button>
+                <Button type="primary" size="medium" onClick={(form as unknown as HTMLFormElement).submit}>
+                    Восстановить
+                </Button>
             </div>
             <p className={clsx(styles.text, "text_type_main-default text_color_inactive")}>
                 Вспомнили пароль? <Link to={"/login"} className={styles.link}> Войти </Link>

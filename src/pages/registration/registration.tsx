@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {ChangeEvent, useCallback, useState} from "react";
 import {Button, EmailInput, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './registration.module.css'
 import clsx from "clsx";
@@ -6,18 +6,29 @@ import {Link} from 'react-router-dom';
 import {enter} from "../../services/actions/auth";
 import {useDispatch} from "react-redux";
 
+interface IRegistrationFields {
+    name: string;
+    email: string;
+    password: string;
+}
+
 function RegistrationPage() {
 
-    /** Может это вынести в отдельный компонент? Они же очень похожи с логином*/
-    const [form, setValue] = useState({name: '', email: '', password: ''});
+    const initialState: IRegistrationFields = {
+        name: '',
+        email: '',
+        password: ''
+    }
 
-    const onChange = e => {
+    const [form, setValue] = useState<IRegistrationFields>(initialState);
+
+    const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setValue({...form, [e.target.name]: e.target.value});
     };
 
     /** Создание пользователя */
-    const dispatch = useDispatch();
-    const register = useCallback(e => {
+    const dispatch: any = useDispatch();
+    const register = useCallback((e: React.SyntheticEvent): void => {
         e.preventDefault();
         dispatch(enter(form));
     }, [form, dispatch]);
@@ -40,7 +51,9 @@ function RegistrationPage() {
                 <PasswordInput name={'password'} value={form.password} onChange={onChange}/>
             </div>
             <div className={"mb-20"}>
-                <Button type="primary" size="medium" onClick={form.submit}> Зарегистрироваться </Button>
+                <Button type="primary" size="medium" onClick={(form as unknown as HTMLFormElement).submit}>
+                    Зарегистрироваться
+                </Button>
             </div>
             <p className={clsx(styles.text, "text_type_main-default text_color_inactive")}>
                 Уже зарегистрированы? <Link to={"/login"} className={styles.link}> Войти </Link>
