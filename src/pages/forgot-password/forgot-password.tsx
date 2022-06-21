@@ -9,7 +9,7 @@ import Loading from "../../components/loading/loading";
 import Error from "../../components/error/error";
 import {History} from "history";
 
-interface IForgotPasswordFields {
+export interface IForgotPasswordFields {
     email: string;
 }
 

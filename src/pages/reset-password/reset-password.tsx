@@ -10,7 +10,7 @@ import Loading from "../../components/loading/loading";
 import Error from "../../components/error/error";
 import {History, Location} from "history";
 
-interface IResetPasswordFields {
+export interface IResetPasswordFields {
     password: string;
     token: string;
 }

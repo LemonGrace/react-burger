@@ -1,18 +1,23 @@
-import React, {useMemo, useRef} from "react";
+import React, {FC, useMemo, useRef} from "react";
 import styles from './burger-ingredients.module.css';
-import PropTypes from 'prop-types';
 import clsx from "clsx";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
 import { useSelector  } from 'react-redux';
-import {Ingredient} from "../../utils/type";
+import {IIngredient, IOrderItem} from "../../utils/type";
 import {useDrag} from "react-dnd";
 import {useHistory, useLocation} from "react-router-dom";
+import {History, Location} from "history";
 
-const DraggableCard = ({item}) => {
+interface IIngredientCard {
+    item: IIngredient,
+    count: number
+}
+
+const DraggableCard: FC<{ item: IIngredient }> = ({item}) => {
     /** Получение данных о выбранных ингредиентах и подсчет их количества*/
-    const content = useSelector(state => state.order.content);
-    const count = useMemo(() => {
-        const unique = [];
+    const content: Array<IOrderItem> = useSelector(state => (state as any).order.content);
+    const count: Array<IIngredientCard> = useMemo(() => {
+        const unique: Array<IIngredientCard> = [];
         content.map((data) => {
             if (!unique.find(value => data.ingredient._id === value.item._id)) {
                 unique.push({item: data.ingredient, count: content
@@ -27,13 +32,21 @@ const DraggableCard = ({item}) => {
         type: "ingredients",
         item: item,
     });
-    const history = useHistory();
-    const location = useLocation();
-    const handleClick = () => {
+    const history: History = useHistory();
+    const location: Location = useLocation();
+    const handleClick = (): void => {
         history.push({
             pathname: `/ingredients/${item._id}`,
             state: { background: location },
         });
+    }
+
+    const countSelectedItem = (item: IIngredient): number => {
+        const ingredientSelected: IIngredientCard | undefined = count.find(value => item.name === value.item.name);
+        if (ingredientSelected) {
+            return ingredientSelected.count;
+        }
+        return 0;
     }
 
     return (
@@ -41,7 +54,7 @@ const DraggableCard = ({item}) => {
              onClick={handleClick} ref={dragRef}>
             {
                 count.find(value => item._id === value.item._id) &&
-                <Counter count={count.find(value => item.name === value.item.name).count} size="default" />
+                <Counter count={countSelectedItem(item)} size="default" />
             }
             <img src={item.image} alt={"Карточка ингредиента"} className="pr-4 pl-4"/>
             <p className={clsx("text_type_digits-default m-1", styles.ingredientsSectionP,
@@ -55,16 +68,17 @@ const DraggableCard = ({item}) => {
     )
 }
 
-const IngredientsSection = React.forwardRef((props, ref) => {
+const IngredientsSection = React.forwardRef<HTMLDivElement, IIngredientsSection>
+((props, ref) => {
     return (
         <>
             <h2 className={clsx(styles.ingredientsSectionCaption, "text_type_main-medium")} ref={ref}>
                 {props.caption}
             </h2>
             <section className={clsx(styles.ingredientsSectionWrapper, 'mb-10 mr-2 ml-4')}>
-                {props.ingredients.map ((item) => {
+                {props.ingredients.map((item) => {
                     return (
-                        <DraggableCard key={item._id} item={item} />
+                        <DraggableCard key={item._id} item={item}/>
                     )
                 })}
             </section>
@@ -74,58 +88,68 @@ const IngredientsSection = React.forwardRef((props, ref) => {
 
 
 function BurgerIngredients() {
-    const burgerData = useSelector(state => state.burgerIngredient.ingredients);
+    const burgerData: Array<IIngredient> = useSelector(state => (state as any).burgerIngredient.ingredients);
     /** Сохрание данных по разделам */
-    const bunArray = useMemo(() => {
+    const bunArray: Array<IIngredient> = useMemo(() => {
         return burgerData.filter(item => item.type === "bun");
     }, [burgerData]);
-    const sauceArray = useMemo(() => {
+    const sauceArray: Array<IIngredient> = useMemo(() => {
         return burgerData.filter(item => item.type === "sauce");
     }, [burgerData]);
-    const mainArray = useMemo(() => {
+    const mainArray: Array<IIngredient> = useMemo(() => {
         return burgerData.filter(item => item.type === "main");
     }, [burgerData]);
 
     /** Табло навигации */
     const [current, setCurrent] = React.useState('bun');
     /** Изменение активной секции */
-    const refBun = useRef(null);
-    const refSauce = useRef(null);
-    const refMain = useRef(null);
-    const scrollPosition = (e) => {
+    const refBun = useRef<HTMLDivElement>(null);
+    const refSauce = useRef<HTMLDivElement>(null);
+    const refMain = useRef<HTMLDivElement>(null);
+    //TODO
+    const scrollPosition = (e: any) => {
+        console.log(typeof e)
         e.preventDefault();
         // Сеттим булочку, только есть разница меньше чем с соусами
-        if (Math.abs(e.target.scrollTop - refBun.current.offsetTop)
-            < Math.abs(e.target.scrollTop - refSauce.current.offsetTop)) {
-            setCurrent('bun');
-        }
-        // Сеттим соусы если разница меньше чем с булочкой и начинками
-        if ((Math.abs(e.target.scrollTop - refBun.current.offsetTop)
-            > Math.abs(e.target.scrollTop - refSauce.current.offsetTop))
-            && (Math.abs(e.target.scrollTop - refSauce.current.offsetTop)
-                < Math.abs(e.target.scrollTop - refMain.current.offsetTop))) {
-            setCurrent('sauce');
-        }
-        // Сеттим начинки, только есть разница меньше чем с соусами
-        if (Math.abs(e.target.scrollTop - refMain.current.offsetTop)
-            < Math.abs(e.target.scrollTop - refSauce.current.offsetTop)) {
-            setCurrent('main');
+        if (refBun.current && refSauce.current && refMain.current){
+            if (Math.abs(e.target.scrollTop - refBun.current.offsetTop)
+                < Math.abs(e.target.scrollTop - refSauce.current.offsetTop)) {
+                setCurrent('bun');
+            }
+            // Сеттим соусы если разница меньше чем с булочкой и начинками
+            if ((Math.abs(e.target.scrollTop - refBun.current.offsetTop)
+                    > Math.abs(e.target.scrollTop - refSauce.current.offsetTop))
+                && (Math.abs(e.target.scrollTop - refSauce.current.offsetTop)
+                    < Math.abs(e.target.scrollTop - refMain.current.offsetTop))) {
+                setCurrent('sauce');
+            }
+            // Сеттим начинки, только есть разница меньше чем с соусами
+            if (Math.abs(e.target.scrollTop - refMain.current.offsetTop)
+                < Math.abs(e.target.scrollTop - refSauce.current.offsetTop)) {
+                setCurrent('main');
+            }
         }
     }
 
-    const scrollTo = (value) => {
+    const scrollTo = (value: string): void => {
         setCurrent(value);
         switch (value) {
             case "bun": {
-                refBun.current.scrollIntoView();
+                if (refBun.current) {
+                    refBun.current.scrollIntoView();
+                }
                 break;
             }
             case "sauce": {
-                refSauce.current.scrollIntoView();
+                if (refSauce.current) {
+                    refSauce.current.scrollIntoView();
+                }
                 break;
             }
             case "main": {
-                refMain.current.scrollIntoView();
+                if (refMain.current) {
+                    refMain.current.scrollIntoView();
+                }
                 break;
             }
             default:
@@ -176,7 +200,7 @@ function BurgerIngredients() {
 }
 export default React.memo(BurgerIngredients);
 
-IngredientsSection.propTypes = {
-    ingredients: PropTypes.arrayOf(Ingredient.isRequired).isRequired,
-    caption: PropTypes.string.isRequired,
+interface IIngredientsSection {
+    ingredients: Array<IIngredient>;
+    caption: string
 }

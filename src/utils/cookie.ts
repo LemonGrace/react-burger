@@ -11,7 +11,7 @@ export function getCookie(name: string): string | undefined {
 interface ICookieProps {
     [name: string]: any;
 }
-export function setCookie(name: string, value: string | number | boolean, props: ICookieProps): void {
+export function setCookie(name: string, value: string | number | boolean, props?: ICookieProps): void {
     props = props || {};
     let exp = props.expires;
     if (typeof exp == 'number' && exp) {

@@ -1,4 +1,4 @@
-import React, {useMemo, useRef} from "react";
+import React, {FC, useMemo, useRef} from "react";
 import styles from './burger-constructor.module.css';
 import clsx from "clsx";
 import {
@@ -15,21 +15,26 @@ import {DELETE_INGREDIENT} from "../../services/actions/details";
 import {useDrag, useDrop} from "react-dnd";
 import {ADD_INGREDIENT, DEFAULT, REORDER, REPLACE_BUN} from "../../services/actions/constructor";
 import { useHistory } from 'react-router-dom';
+import {IIngredient, IOrderItem} from "../../utils/type";
+import {History} from "history";
 
+interface IDragItem {
+    item: IOrderItem
+}
 
 /** Карточка отдельного инг. для реализации dnd */
-const DraggableCard = ({item}) => {
-    const dispatch = useDispatch();
-    const ref = useRef(null)
+const DraggableCard: FC<IDragItem> = ({item}) => {
+    const dispatch: any = useDispatch();
+    const ref = useRef<HTMLDivElement>(null)
     /** Обработка перетаскивания карточки */
     const [, dragRef] = useDrag({
         type: "constructor",
         item: item,
     });
-    let hoverIndex;
+    let hoverIndex: number;
     const [, dropTarget] = useDrop({
         accept: "constructor",
-        drop(itemDrag) {
+        drop(itemDrag: IOrderItem) {
             dispatch({type: REORDER, from: itemDrag.order, to: hoverIndex});
         },
         hover(itemDrag) {
@@ -37,7 +42,7 @@ const DraggableCard = ({item}) => {
         }
     });
     dragRef(dropTarget(ref));
-    const handleClose = () => {
+    const handleClose = (): void => {
         dispatch({type: DELETE_INGREDIENT, id: item.ingredient._id, order: item.order})
     }
     return (
@@ -56,19 +61,19 @@ const DraggableCard = ({item}) => {
 }
 
 function BurgerConstructor() {
-    const content = useSelector(state => state.order.content);
+    const content: Array<IOrderItem> = useSelector(state => (state as any).order.content);
     /** Получение булочки*/
-    const bun = useMemo(() => {
+    const bun: IOrderItem = useMemo(() => {
         return content.filter(item => item.ingredient.type === "bun")[0];
     }, [content]);
 
     /** Получение массива ингредиентов без булочек*/
-    const ingredients = useMemo(() => {
+    const ingredients: Array<IOrderItem> = useMemo(() => {
         return content.filter(item => item.ingredient.type !== "bun");
     }, [content]);
 
     /** Вычисление итоговой стоимости заказа*/
-    const finalCost = useMemo(() => {
+    const finalCost: number = useMemo(() => {
         if (bun && ingredients) {
             return ingredients.reduce(function (prev, next) {
                 return prev + next.ingredient.price;
@@ -81,11 +86,11 @@ function BurgerConstructor() {
     }, [ingredients, bun])
 
     /** Работа со статусом заказа и модальным окном */
-    const dispatch = useDispatch();
+    const dispatch: any = useDispatch();
     /** Получение статуса видимости модалки */
-    const {isVisible} = useSelector(state => state.modal);
+    const {isVisible}: {isVisible: boolean} = useSelector(state => (state as any).modal);
     /** Создание уникальных ключей */
-    function uID() {
+    function uID(): string {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     }
 
@@ -106,7 +111,7 @@ function BurgerConstructor() {
     /** Обработка броска карточки */
     const [{isHover}, dropTarget] = useDrop({
         accept: "ingredients",
-        drop(item){
+        drop(item: IIngredient){
             item.type === "bun" ? dispatch({type: REPLACE_BUN, item: item})
                 : content.length >= 2 ? dispatch({type: ADD_INGREDIENT, item: item}) : dispatch({type: DEFAULT});
         },
@@ -116,13 +121,13 @@ function BurgerConstructor() {
     });
 
     /**Реализация переадресации, если нет данных об авторизации*/
-    const history = useHistory();
-    const {isAuth} = useSelector(state => state.user);
+    const history: History = useHistory();
+    const {isAuth}: {isAuth: boolean} = useSelector(state => (state as any).user);
 
     /** Подсветка области, если мало или вообще нет элементов в заказе */
-    const needShowDrop = content.length < 3 ? isHover ? styles.canDrop : "" : "";
+    const needShowDrop: string = content.length < 3 ? isHover ? styles.canDrop : "" : "";
 
-    const handleClick = () => {
+    const handleClick = (): void => {
         if (isAuth) {
             dispatch(openModal(content));
         } else {

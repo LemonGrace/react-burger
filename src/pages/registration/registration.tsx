@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 import {enter} from "../../services/actions/auth";
 import {useDispatch} from "react-redux";
 
-interface IRegistrationFields {
+export interface IRegistrationFields {
     name: string;
     email: string;
     password: string;

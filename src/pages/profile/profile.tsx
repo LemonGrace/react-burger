@@ -6,7 +6,7 @@ import styles from "./profile.module.css"
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import clsx from "clsx";
 
-interface IUserInfo {
+export interface IUserInfo {
     name: string;
     email: string;
     password: string;

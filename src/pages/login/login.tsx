@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 import {useDispatch} from "react-redux";
 import {enter} from "../../services/actions/auth";
 
-interface ILoginFields {
+export interface ILoginFields {
     email: string;
     password: string;
 }
