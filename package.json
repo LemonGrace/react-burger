@@ -6,6 +6,8 @@
     "@reduxjs/toolkit": "^1.8.2",
     "@types/react-router": "^5.1.18",
     "@types/react-router-dom": "^5.3.3",
+    "@types/react": "17.0.0",
+    "@types/react-dom": "17.0.0",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.4.2",
     "clsx": "^1.1.1",
     "prop-types": "^15.7.2",

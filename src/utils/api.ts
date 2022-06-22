@@ -8,21 +8,12 @@ import { IRegistrationFields } from "../pages/registration/registration";
 import {IResetPasswordFields} from "../pages/reset-password/reset-password";
 
 
-export interface CustomResponse extends Body {
-    readonly headers: Headers;
-    readonly ok: boolean;
-    readonly redirected: boolean;
-    readonly status: number;
-    readonly statusText: string;
-    readonly type: ResponseType;
-    readonly url: string;
-}
 interface IIngredientJson {
     readonly success: boolean;
     readonly data: Array<IIngredient>
 }
 
-export function checkResponse(response: CustomResponse): void | Error {
+export function checkResponse(response: Response): void | Error {
     if (!response.ok) {
         throw new Error("response is not ok");
     }
@@ -31,7 +22,7 @@ export function checkResponse(response: CustomResponse): void | Error {
 export const getBurgerData = async (): Promise<IIngredientJson | Error> => {
     try {
         const url: string = BaseUrl + "ingredients";
-        const response: CustomResponse = await fetch(url);
+        const response: Response = await fetch(url);
         checkResponse(response);
         return response.json();
     }
@@ -67,7 +58,7 @@ export const createOrder = async (ingredients: Array<IOrderItem>): Promise<IOrde
         const requestData: Array<string> = [];
         ingredients.map((item) => {return requestData.push(item.ingredient._id)});
         const url: string = BaseUrl + "orders";
-        const response: CustomResponse = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -99,7 +90,7 @@ interface IUserJSON {
 export const userAuth = async (form: ILoginFields | IRegistrationFields): Promise<IUserJSON | Error> => {
     try {
         const url = authUrl + ((form as IRegistrationFields).name ? "register" : "login");
-        const response = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -127,7 +118,7 @@ interface IEmailJSON {
 export const sendEmail = async (form: IForgotPasswordFields): Promise<IEmailJSON | Error> => {
     try {
         const url: string = BaseUrl + "password-reset";
-        const response: CustomResponse = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -151,10 +142,10 @@ interface IUpdateJSON {
     readonly success: boolean;
     readonly message: string;
 }
-export const updatePassword = async (form: IResetPasswordFields) => {
+export const updatePassword = async (form: IResetPasswordFields): Promise<IUpdateJSON | Error> => {
     try {
         const url: string = BaseUrl + "password-reset/reset";
-        const response: CustomResponse = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -182,7 +173,7 @@ interface ITokenJSON {
 const updateToken = async (): Promise<ITokenJSON | Error> => {
     try {
         const url: string = authUrl + "token";
-        const response: CustomResponse = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -208,10 +199,10 @@ interface IUserInfoJSON {
     readonly user: IUser;
 }
 /** Запрос данных по токену */
-export const getUserInfo = async () => {
+export const getUserInfo = async (): Promise<IUserInfoJSON | undefined | Error> => {
     const url: string = authUrl + "user";
     try {
-        const response: CustomResponse = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
@@ -236,7 +227,7 @@ export const getUserInfo = async () => {
                 if (res && res.success) {
                     setCookie('refreshToken', res.refreshToken);
                     setCookie('token', res.accessToken.split('Bearer ')[1]);
-                    const response = await fetch(url, {
+                    const response: Response = await fetch(url, {
                         method: 'GET',
                         mode: 'cors',
                         cache: 'no-cache',
@@ -268,7 +259,7 @@ interface IUserUpdateJSON {
 export const updateUserInfo = async (form: IUserInfo): Promise<IUserUpdateJSON | Error> => {
     try {
         const url: string = authUrl + "user";
-        const response: CustomResponse = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'PATCH',
             mode: 'cors',
             cache: 'no-cache',
@@ -296,7 +287,7 @@ interface ILogoutJSON {
 export const logOut = async (): Promise<ILogoutJSON | Error> => {
     try {
         const url: string = authUrl + "logout";
-        const response: CustomResponse = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',

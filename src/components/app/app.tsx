@@ -1,6 +1,6 @@
 import React from 'react';
 import AppHeader from '../app-header/app-header';
-import {BrowserRouter as Router, Switch, Route, useLocation} from 'react-router-dom';
+import {Switch, Route, useLocation} from 'react-router-dom';
 import HomePage from "../../pages/home/home";
 import LoginPage from "../../pages/login/login";
 import RegistrationPage from "../../pages/registration/registration";
@@ -16,10 +16,11 @@ import styles from '../modal/modal.module.css';
 import clsx from "clsx";
 import {getUser} from "../../services/actions/auth";
 import {Location} from "history";
+import {getIngredients} from "../../services/actions/ingredients";
 
 
 const Main = () => {
-    const location: Location  = useLocation();
+    const location: Location = useLocation();
     const background: Location = location.state && (location.state as any).background;
     return (
         <>
@@ -61,17 +62,18 @@ const Main = () => {
 function App() {
     /** Получение данных об авторизации */
     const dispatch: any = useDispatch();
-    const {isAuth, isUserLoading}: {isAuth: boolean, isUserLoading: boolean}
+    const {isAuth, isUserLoading}: { isAuth: boolean, isUserLoading: boolean }
         = useSelector(state => (state as any).user);
     if (!isAuth && getCookie("token")) {
         if (!isUserLoading) dispatch(getUser());
     }
+    React.useEffect(() => {
+        dispatch(getIngredients());
+    }, [dispatch])
     return (
         <React.Fragment>
-            <Router>
-                <AppHeader/>
-                <Main />
-            </Router>
+            <AppHeader/>
+            <Main/>
         </React.Fragment>
     );
 }

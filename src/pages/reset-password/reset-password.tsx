@@ -84,7 +84,7 @@ function PasswordResetPage() {
                 <Input onChange={onChange} value={form.token} name={'token'} placeholder={"Введите код из письма"}/>
             </div>
             <div className={"mb-20"}>
-                <Button type="primary" size="medium" onClick={(form as unknown as HTMLFormElement).submit}>
+                <Button type="primary" size="medium" htmlType={"submit"}>
                     Сохранить
                 </Button>
             </div>

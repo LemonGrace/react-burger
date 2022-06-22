@@ -65,7 +65,7 @@ function ForgotPasswordPage() {
                 <Input onChange={onChange} value={form.email} name={'email'} placeholder={"Укажите e-mail"}/>
             </div>
             <div className={"mb-20"}>
-                <Button type="primary" size="medium" onClick={(form as unknown as HTMLFormElement).submit}>
+                <Button type="primary" size="medium" htmlType={"submit"}>
                     Восстановить
                 </Button>
             </div>

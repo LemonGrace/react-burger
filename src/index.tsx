@@ -1,5 +1,6 @@
 import React from 'react';
 // import ReactDOM from 'react-dom/client';
+import {BrowserRouter as Router} from 'react-router-dom';
 import { render } from "react-dom";
 import App from './components/app/app';
 import { Provider } from 'react-redux';
@@ -17,16 +18,9 @@ const enhancer = composeEnhancers(applyMiddleware(thunk));
 const store = createStore(rootReducer, enhancer);
 const root = document.getElementById("root");
 render(
-    <Provider store={store}>
-    <App />
-</Provider>, root);
-// const root = ReactDOM.createRoot(
-//   document.getElementById('root') as HTMLElement
-// );
-// root.render(
-//     /** StrictMode с React 18.0.0 и react-router v5 блокирует работу Link */
-//         <Provider store={store}>
-//             <App />
-//         </Provider>
-// );
+    <Router>
+        <Provider store={store}>
+            <App/>
+        </Provider>
+    </Router>, root);
 

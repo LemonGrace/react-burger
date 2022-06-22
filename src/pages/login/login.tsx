@@ -43,7 +43,7 @@ function LoginPage() {
                 <PasswordInput name={'password'} value={form.password} onChange={onChange}/>
             </div>
             <div className={"mb-20"}>
-                <Button type="primary" size="medium" onClick={(form as unknown as HTMLFormElement).submit}>
+                <Button type="primary" size="medium" htmlType={"submit"}>
                     Войти
                 </Button>
             </div>

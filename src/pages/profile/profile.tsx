@@ -48,7 +48,7 @@ const ProfileData = () => {
         [form, dispatch]
     );
     return (
-        <form className={clsx("ml-15")}>
+        <form className={clsx("ml-15")} onSubmit={update}>
             <div className={"mb-6"}>
                 <Input value={form.name} onChange={onChange} name={"name"} placeholder={"Имя"}
                        icon={'EditIcon'}/>
@@ -66,7 +66,7 @@ const ProfileData = () => {
                 <p className={clsx("mr-7  text_type_main-small", styles.cancel)} onClick={resetForm}>
                     Отмена
                 </p>
-                <Button type="primary" size="medium" onClick={update}> Сохранить </Button>
+                <Button type="primary" size="medium" htmlType={"submit"}> Сохранить </Button>
             </div>
         </form>
     )
