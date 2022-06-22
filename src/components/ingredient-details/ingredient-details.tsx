@@ -1,9 +1,8 @@
 import React from 'react';
 import styles from './ingredient-details.module.css'
 import clsx from "clsx";
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {useParams} from "react-router-dom";
-import {getIngredients} from "../../services/actions/ingredients";
 import Loading from "../loading/loading";
 import Error from "../error/error";
 import {IIngredient} from "../../utils/type";
@@ -15,11 +14,6 @@ function IngredientDetails() {
         useSelector((state) => (state as any).burgerIngredient);
 
     const {id}: {id: string} = useParams<{id: string}>();
-    const dispatch: any = useDispatch();
-    /** Получение всех ингредиентов*/
-    React.useEffect(() => {
-        dispatch(getIngredients());
-    }, [dispatch])
 
     if (isIngredientsLoading || ingredients.length < 1) {
         return (<Loading/>);
