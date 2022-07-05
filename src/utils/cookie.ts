@@ -1,12 +1,17 @@
-export function getCookie(name) {
+export function getCookie(name: string): string | undefined {
     const matches = document.cookie.match(
-        // eslint-disable-next-line
-        new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
+        new RegExp('(?:^|; )' +
+            // eslint-disable-next-line
+            name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
     );
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-export function setCookie(name, value, props) {
+//TODO : props это что?
+interface ICookieProps {
+    [name: string]: any;
+}
+export function setCookie(name: string, value: string | number | boolean, props?: ICookieProps): void {
     props = props || {};
     let exp = props.expires;
     if (typeof exp == 'number' && exp) {
@@ -29,6 +34,6 @@ export function setCookie(name, value, props) {
     document.cookie = updatedCookie;
 }
 
-export function deleteCookie(name) {
-    setCookie(name, null, { expires: -1 });
+export function deleteCookie(name: string): void {
+    setCookie(name, "", { expires: -1 });
 }

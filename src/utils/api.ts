@@ -1,16 +1,28 @@
 import {authUrl, BaseUrl} from "./baseUrl";
 import {getCookie, setCookie} from "./cookie";
+import {IIngredient, IOrderItem} from "./type";
+import {IUserInfo} from "../pages/profile/profile";
+import {IForgotPasswordFields} from "../pages/forgot-password/forgot-password";
+import {ILoginFields} from "../pages/login/login";
+import { IRegistrationFields } from "../pages/registration/registration";
+import {IResetPasswordFields} from "../pages/reset-password/reset-password";
 
-export function checkResponse(response) {
+
+interface IIngredientJson {
+    readonly success: boolean;
+    readonly data: Array<IIngredient>
+}
+
+export function checkResponse(response: Response): void | Error {
     if (!response.ok) {
         throw new Error("response is not ok");
     }
 }
 
-export const getBurgerData = async () => {
+export const getBurgerData = async (): Promise<IIngredientJson | Error> => {
     try {
-        const url = BaseUrl + "ingredients";
-        const response = await fetch(url);
+        const url: string = BaseUrl + "ingredients";
+        const response: Response = await fetch(url);
         checkResponse(response);
         return response.json();
     }
@@ -19,12 +31,34 @@ export const getBurgerData = async () => {
     }
 }
 
-export const createOrder = async (ingredients) => {
+interface IOrderInfo {
+    readonly createdAt: string;
+    readonly name: string;
+    readonly number: number;
+    readonly price: number;
+    readonly status: string;
+    readonly updatedAt: string;
+    readonly _id: string;
+    readonly ingredients: Array<IIngredient>;
+    readonly owner: {
+        readonly createdAt: string;
+        readonly email: string;
+        readonly name: string;
+        readonly updatedAt: string
+    }
+}
+interface IOrderJSON {
+    readonly success: boolean;
+    readonly name: string;
+    readonly order: IOrderInfo;
+}
+
+export const createOrder = async (ingredients: Array<IOrderItem>): Promise<IOrderJSON | Error> => {
     try {
-        const requestData = [];
+        const requestData: Array<string> = [];
         ingredients.map((item) => {return requestData.push(item.ingredient._id)});
-        const url = BaseUrl + "orders";
-        const response = await fetch(url, {
+        const url: string = BaseUrl + "orders";
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -43,10 +77,20 @@ export const createOrder = async (ingredients) => {
     }
 }
 
-export const userAuth = async (form) => {
+interface IUser {
+    readonly name: string;
+    readonly email: string;
+}
+interface IUserJSON {
+    readonly accessToken: string;
+    readonly refreshToken: string;
+    readonly success: boolean;
+    readonly user: IUser;
+}
+export const userAuth = async (form: ILoginFields | IRegistrationFields): Promise<IUserJSON | Error> => {
     try {
-        const url = authUrl + (form.name ? "register" : "login");
-        const response = await fetch(url, {
+        const url = authUrl + ((form as IRegistrationFields).name ? "register" : "login");
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -67,10 +111,14 @@ export const userAuth = async (form) => {
     }
 }
 
-export const sendEmail = async (form) => {
+interface IEmailJSON {
+    readonly success: boolean;
+    readonly message: string;
+}
+export const sendEmail = async (form: IForgotPasswordFields): Promise<IEmailJSON | Error> => {
     try {
-        const url = BaseUrl + "password-reset";
-        const response = await fetch(url, {
+        const url: string = BaseUrl + "password-reset";
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -90,10 +138,14 @@ export const sendEmail = async (form) => {
     }
 }
 
-export const updatePassword = async (form) => {
+interface IUpdateJSON {
+    readonly success: boolean;
+    readonly message: string;
+}
+export const updatePassword = async (form: IResetPasswordFields): Promise<IUpdateJSON | Error> => {
     try {
-        const url = BaseUrl + "password-reset/reset";
-        const response = await fetch(url, {
+        const url: string = BaseUrl + "password-reset/reset";
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -113,10 +165,15 @@ export const updatePassword = async (form) => {
     }
 }
 
-const updateToken = async () => {
+interface ITokenJSON {
+    readonly success: boolean;
+    readonly accessToken: string;
+    readonly refreshToken: string;
+}
+const updateToken = async (): Promise<ITokenJSON | Error> => {
     try {
-        const url = authUrl + "token";
-        const response = await fetch(url, {
+        const url: string = authUrl + "token";
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -136,11 +193,16 @@ const updateToken = async () => {
         throw new Error("response is not ok");
     }
 }
+
+interface IUserInfoJSON {
+    readonly success: boolean;
+    readonly user: IUser;
+}
 /** Запрос данных по токену */
-export const getUserInfo = async () => {
-    const url = authUrl + "user";
+export const getUserInfo = async (): Promise<IUserInfoJSON | undefined | Error> => {
+    const url: string = authUrl + "user";
     try {
-        const response = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
@@ -158,11 +220,14 @@ export const getUserInfo = async () => {
     catch (e) {
         try {
             /** Обновление токена, если на тот запрос выпала ошибка */
-            updateToken().then(res => {
+            updateToken().then(async res => {
+                if (res instanceof Error) {
+                    return;
+                }
                 if (res && res.success) {
                     setCookie('refreshToken', res.refreshToken);
                     setCookie('token', res.accessToken.split('Bearer ')[1]);
-                    const response = fetch(url, {
+                    const response: Response = await fetch(url, {
                         method: 'GET',
                         mode: 'cors',
                         cache: 'no-cache',
@@ -187,10 +252,14 @@ export const getUserInfo = async () => {
     }
 }
 
-export const updateUserInfo = async (form) => {
+interface IUserUpdateJSON {
+    readonly success: boolean;
+    readonly user: IUser;
+}
+export const updateUserInfo = async (form: IUserInfo): Promise<IUserUpdateJSON | Error> => {
     try {
-        const url = authUrl + "user";
-        const response = await fetch(url, {
+        const url: string = authUrl + "user";
+        const response: Response = await fetch(url, {
             method: 'PATCH',
             mode: 'cors',
             cache: 'no-cache',
@@ -211,10 +280,14 @@ export const updateUserInfo = async (form) => {
     }
 }
 
-export const logOut = async () => {
+interface ILogoutJSON {
+    readonly message: string;
+    readonly success: boolean;
+}
+export const logOut = async (): Promise<ILogoutJSON | Error> => {
     try {
-        const url = authUrl + "logout";
-        const response = await fetch(url, {
+        const url: string = authUrl + "logout";
+        const response: Response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',

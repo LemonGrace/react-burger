@@ -5,14 +5,15 @@ import {BurgerIcon, ListIcon, ProfileIcon, Logo} from '@ya.praktikum/react-devel
 import {NavLink} from "react-router-dom";
 import {useRouteMatch} from 'react-router-dom';
 
+
 function AppHeader() {
     /** Получение данных об активной странице */
-    const isMainPageActive = useRouteMatch({
+    const isMainPageActive: boolean = !!useRouteMatch({
         path: "/",
-        strict: true
-    }).isExact;
-    const isHistoryOrderPageActive = !!useRouteMatch("/order");
-    const isProfilePageActive = !!useRouteMatch("/profile");
+        exact: true,
+    });
+    const isHistoryOrderPageActive: boolean = !!useRouteMatch("/order");
+    const isProfilePageActive: boolean = !!useRouteMatch("/profile");
 
     return (
         <header className={styles.appHeaderWrapper}>

@@ -3,11 +3,12 @@ import styles from './modal-overlay.module.css';
 import {useDispatch} from 'react-redux';
 import {closeModal} from '../../services/actions/modal';
 import {useHistory, useRouteMatch} from "react-router-dom";
+import {History} from "history";
 
 function ModalOverlay() {
-    const dispatch = useDispatch();
-    const type = useRouteMatch("/ingredients") ? "details" : "order";
-    const history = useHistory();
+    const dispatch: any = useDispatch();
+    const type: string = useRouteMatch("/ingredients") ? "details" : "order";
+    const history: History = useHistory();
 
     const handleClose = () => {
         if (type === "details") {

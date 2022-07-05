@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './modal.module.css';
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import clsx from "clsx";
 import ModalOverlay from "../modal-overlay/modal-overlay";
-import PropTypes from "prop-types";
 import {closeModal} from "../../services/actions/modal";
 import {useDispatch} from "react-redux";
 import {useHistory, useRouteMatch} from "react-router-dom";
+import {History} from "history";
 
-const modalRoot = document.getElementById("modals");
+const modalRoot = document.getElementById("modals")!;
 
-function Modal(props) {
-    const dispatch = useDispatch();
-    const type = useRouteMatch("/ingredients") ? "details" : "order";
-    const history = useHistory();
+interface IModalProps {
+    caption: string;
+    children?: ReactNode;
+}
+
+function Modal(props: IModalProps) {
+    const dispatch: any = useDispatch();
+    const type: string = useRouteMatch("/ingredients") ? "details" : "order";
+    const history: History = useHistory();
     
     const handleClose = React.useCallback(() => {
         /** Как только модалка с заказаком будет также вынесена, можно будет оставить только goBack*/
@@ -24,7 +29,7 @@ function Modal(props) {
             dispatch(closeModal());
         }
     }, [type, dispatch, history]);
-    const escClose = React.useCallback((event) => {
+    const escClose = React.useCallback((event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             if (type === "details") {
                 history.goBack();
@@ -58,6 +63,3 @@ function Modal(props) {
 
 export default Modal;
 
-Modal.propTypes = {
-    caption: PropTypes.string.isRequired,
-}

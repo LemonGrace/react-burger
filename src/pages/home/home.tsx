@@ -1,6 +1,5 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {getIngredients} from "../../services/actions/ingredients";
+import {useSelector} from "react-redux";
 import {DndProvider} from "react-dnd";
 import BurgerIngredients from "../../components/burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../../components/burger-constructor/burger-constructor";
@@ -11,11 +10,8 @@ import Loading from "../../components/loading/loading";
 
 function HomePage() {
     /** Получение данных об ингредиентах */
-    const {isIngredientsLoading, isIngredientsFailed} = useSelector((state) => state.burgerIngredient);
-    const dispatch = useDispatch();
-    React.useEffect(() => {
-        dispatch(getIngredients());
-    }, [dispatch])
+    const {isIngredientsLoading, isIngredientsFailed}: {isIngredientsLoading: boolean, isIngredientsFailed: boolean}
+        = useSelector((state) => (state as any).burgerIngredient);
 
     if (isIngredientsLoading || isIngredientsFailed) {
         return (<Loading/>)

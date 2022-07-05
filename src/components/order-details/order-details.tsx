@@ -8,7 +8,8 @@ import Error from "../error/error";
 
 function OrderDetails() {
     /** Получение данных о заказе */
-    const {order, orderRequest, orderFailed} = useSelector(state => state.order);
+    const {order, orderRequest, orderFailed}: { order: number, orderRequest: boolean, orderFailed: boolean}
+        = useSelector(state => (state as any).order);
 
     if (orderRequest) {
         return (<Loading/>);
