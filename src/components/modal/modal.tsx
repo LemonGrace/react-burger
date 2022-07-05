@@ -5,7 +5,7 @@ import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import clsx from "clsx";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import {closeModal} from "../../services/actions/modal";
-import {useDispatch} from "react-redux";
+import {useDispatch} from "../../utils/hooks";
 import {useHistory, useRouteMatch} from "react-router-dom";
 import {History} from "history";
 
@@ -17,12 +17,12 @@ interface IModalProps {
 }
 
 function Modal(props: IModalProps) {
-    const dispatch: any = useDispatch();
+    const dispatch = useDispatch();
     const type: string = useRouteMatch("/ingredients") ? "details" : "order";
     const history: History = useHistory();
     
     const handleClose = React.useCallback(() => {
-        /** Как только модалка с заказаком будет также вынесена, можно будет оставить только goBack*/
+        /** Как только модалка с заказом будет также вынесена, можно будет оставить только goBack*/
         if (type === "details") {
             history.goBack();
         } else {

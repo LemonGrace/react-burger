@@ -1,7 +1,7 @@
 import React, {useCallback} from "react";
 import {NavLink, useHistory} from "react-router-dom";
 import styles from "./profile-nav.module.css";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "../../utils/hooks";
 import clsx from "clsx";
 import {logout} from "../../services/actions/auth";
 import {History} from "history";
@@ -9,9 +9,9 @@ import {History} from "history";
 
 function ProfileNav() {
 
-    const dispatch: any = useDispatch();
+    const dispatch = useDispatch();
     const history: History = useHistory();
-    const {username, email}: {username: string, email: string} = useSelector(state => (state as any).user);
+    const {username, email} = useSelector(state => state.user);
     const logoutUser = useCallback((e: React.SyntheticEvent) => {
         e.preventDefault();
         dispatch(logout())

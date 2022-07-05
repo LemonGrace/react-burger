@@ -36,7 +36,7 @@ export const user = (state = initialStateUser, action: TAuthActions) => {
         }
         case USER_REQUEST_ERROR: {
             return {
-                username: "", email: "",
+                ...state, username: "", email: "",
                 isUserLoading: false, isUserRequestFailed: true
             };
         }

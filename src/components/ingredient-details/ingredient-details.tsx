@@ -1,17 +1,13 @@
 import React from 'react';
 import styles from './ingredient-details.module.css'
 import clsx from "clsx";
-import {useSelector} from 'react-redux';
+import {useSelector} from "../../utils/hooks";
 import {useParams} from "react-router-dom";
 import Loading from "../loading/loading";
 import Error from "../error/error";
-import {IIngredient} from "../../utils/type";
 
 function IngredientDetails() {
-    // TODO Redux
-    const {ingredients, isIngredientsLoading, isIngredientsFailed}:
-        { ingredients: Array<IIngredient>, isIngredientsLoading: boolean, isIngredientsFailed: boolean } =
-        useSelector((state) => (state as any).burgerIngredient);
+    const {ingredients, isIngredientsLoading, isIngredientsFailed} = useSelector(state => state.burgerIngredient);
 
     const {id}: {id: string} = useParams<{id: string}>();
 
@@ -22,8 +18,10 @@ function IngredientDetails() {
         return (<Error/>);
     }
 
-    //@ts-ignore // TODO Redux
-    const ingredientSelected: IIngredient = ingredients.find(item => item._id === id);
+    const ingredientSelected = ingredients.find(item => item._id === id);
+    if (!ingredientSelected) {
+        return (<div/>);
+    }
     return (
         <div className={styles.detailsContainer}>
             <div>

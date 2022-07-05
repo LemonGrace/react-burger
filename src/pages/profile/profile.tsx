@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useCallback} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "../../utils/hooks";
 import {getUser, updateInfo} from "../../services/actions/auth";
 import ProfileNav from "../../components/profile-nav/profile-nav";
 import styles from "./profile.module.css"
@@ -14,12 +14,8 @@ export interface IUserInfo {
 
 const ProfileData = () => {
     /** Получение и сохранение данных о пользователе*/
-    const dispatch: any = useDispatch();
-    const {username, email, isAuth, isUserLoading}: {
-        username: string, email: string,
-        isAuth: boolean, isUserLoading: boolean
-    }
-        = useSelector(state => (state as any).user);
+    const dispatch = useDispatch();
+    const {username, email, isAuth, isUserLoading} = useSelector(state => state.user);
 
     if (!username && !email && isAuth) {
         if (!isUserLoading) dispatch(getUser());

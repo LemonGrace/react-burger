@@ -11,7 +11,7 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import ForgotPasswordPage from "../../pages/forgot-password/forgot-password";
 import ProfilePage from "../../pages/profile/profile";
 import {getCookie} from "../../utils/cookie";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "../../utils/hooks";
 import styles from '../modal/modal.module.css';
 import clsx from "clsx";
 import {getUser} from "../../services/actions/auth";
@@ -30,7 +30,7 @@ const Main = () => {
                 </Route>
                 <Route path="/ingredients/:id">
                     <div className={clsx(styles.modalCenter, "mt-30")}>
-                        <span className={clsx("text_type_main-large", styles.modalHeader)}> Детали игредиента</span>
+                        <span className={clsx("text_type_main-large", styles.modalHeader)}> Детали ингредиента</span>
                         <IngredientDetails/>
                     </div>
                 </Route>
@@ -52,7 +52,7 @@ const Main = () => {
             </Switch>
             {
                 background && (<Route path="/ingredients/:id">
-                    <Modal caption={"Детали игредиента"}><IngredientDetails/></Modal>
+                    <Modal caption={"Детали ингредиента"}><IngredientDetails/></Modal>
                 </Route>)
             }
         </>
@@ -61,9 +61,8 @@ const Main = () => {
 
 function App() {
     /** Получение данных об авторизации */
-    const dispatch: any = useDispatch();
-    const {isAuth, isUserLoading}: { isAuth: boolean, isUserLoading: boolean }
-        = useSelector(state => (state as any).user);
+    const dispatch = useDispatch();
+    const {isAuth, isUserLoading} = useSelector(state => state.user);
     if (!isAuth && getCookie("token")) {
         if (!isUserLoading) dispatch(getUser());
     }

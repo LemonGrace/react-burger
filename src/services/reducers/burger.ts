@@ -2,10 +2,11 @@ import {INGREDIENTS_REQUEST, INGREDIENTS_SUCCESS, INGREDIENTS_ERROR} from '../co
 import {SET_VISIBLE, DELETE_VISIBLE} from "../constants/modal";
 import {TIngredientsActions} from "../actions/ingredients";
 import {TModalAction} from "../actions/modal";
+import { IIngredient } from '../../utils/type';
 
 /** редьюсер для загрузки данных */
 type TIngredients = {
-    ingredients: Array<TIngredients>,
+    ingredients: Array<IIngredient>,
     isIngredientsLoading: boolean,
     isIngredientsFailed: boolean,
 };

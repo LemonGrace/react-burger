@@ -2,8 +2,8 @@ import React, {FC, useMemo, useRef} from "react";
 import styles from './burger-ingredients.module.css';
 import clsx from "clsx";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components'
-import { useSelector  } from 'react-redux';
-import {IIngredient, IOrderItem} from "../../utils/type";
+import { useSelector  } from "../../utils/hooks";
+import {IIngredient} from "../../utils/type";
 import {useDrag} from "react-dnd";
 import {useHistory, useLocation} from "react-router-dom";
 import {History, Location} from "history";
@@ -15,7 +15,7 @@ interface IIngredientCard {
 
 const DraggableCard: FC<{ item: IIngredient }> = ({item}) => {
     /** Получение данных о выбранных ингредиентах и подсчет их количества*/
-    const content: Array<IOrderItem> = useSelector(state => (state as any).order.content);
+    const content = useSelector(state => state.order.content);
     const count: Array<IIngredientCard> = useMemo(() => {
         const unique: Array<IIngredientCard> = [];
         content.map((data) => {
@@ -88,8 +88,8 @@ const IngredientsSection = React.forwardRef<HTMLDivElement, IIngredientsSection>
 
 
 function BurgerIngredients() {
-    const burgerData: Array<IIngredient> = useSelector(state => (state as any).burgerIngredient.ingredients);
-    /** Сохрание данных по разделам */
+    const burgerData = useSelector(state => state.burgerIngredient.ingredients);
+    /** Сохранение данных по разделам */
     const bunArray: Array<IIngredient> = useMemo(() => {
         return burgerData.filter(item => item.type === "bun");
     }, [burgerData]);
@@ -106,9 +106,7 @@ function BurgerIngredients() {
     const refBun = useRef<HTMLDivElement>(null);
     const refSauce = useRef<HTMLDivElement>(null);
     const refMain = useRef<HTMLDivElement>(null);
-    //TODO
     const scrollPosition = (e: any) => {
-        console.log(typeof e)
         e.preventDefault();
         // Сеттим булочку, только есть разница меньше чем с соусами
         if (refBun.current && refSauce.current && refMain.current){

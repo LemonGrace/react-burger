@@ -2,14 +2,13 @@ import React from 'react';
 import styles from './order-details.module.css'
 import doneImagePath from '../../images/done.png';
 import clsx from "clsx";
-import {useSelector} from 'react-redux';
+import {useSelector} from "../../utils/hooks";
 import Loading from "../loading/loading";
 import Error from "../error/error";
 
 function OrderDetails() {
     /** Получение данных о заказе */
-    const {order, orderRequest, orderFailed}: { order: number, orderRequest: boolean, orderFailed: boolean}
-        = useSelector(state => (state as any).order);
+    const {order, orderRequest, orderFailed} = useSelector(state => state.order);
 
     if (orderRequest) {
         return (<Loading/>);
