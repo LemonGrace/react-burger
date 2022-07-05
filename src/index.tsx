@@ -4,9 +4,14 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import { render } from "react-dom";
 import App from './components/app/app';
 import { Provider } from 'react-redux';
-import {rootReducer} from './services/reducers/index'
+import {rootReducer} from './services/reducers'
 import {applyMiddleware, compose, createStore} from "@reduxjs/toolkit";
-import thunk from 'redux-thunk';
+import thunk, { ThunkAction } from 'redux-thunk';
+import {TAuthActions, TRecoverPasswordActions} from "./services/actions/auth";
+import {TConstructorActions} from "./services/actions/constructor";
+import {TIngredientsActions} from "./services/actions/ingredients";
+import {TModalAction} from "./services/actions/modal";
+import { Action, ActionCreator, Dispatch } from 'redux';
 declare global {
     interface Window {
         __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -16,6 +21,17 @@ declare global {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 const store = createStore(rootReducer, enhancer);
+export type RootState = ReturnType<typeof store.getState>;
+type TApplicationActions =
+    | TAuthActions
+    | TRecoverPasswordActions
+    | TConstructorActions
+    | TIngredientsActions
+    | TModalAction;
+export type AppThunk<TReturn = void> = ActionCreator<ThunkAction<TReturn, Action, RootState, TApplicationActions>>;
+export type AppDispatch = Dispatch<TApplicationActions>;
+
+
 const root = document.getElementById("root");
 render(
     <Router>

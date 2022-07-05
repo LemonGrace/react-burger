@@ -77,7 +77,7 @@ export const createOrder = async (ingredients: Array<IOrderItem>): Promise<IOrde
     }
 }
 
-interface IUser {
+export interface IUser {
     readonly name: string;
     readonly email: string;
 }
@@ -194,7 +194,7 @@ const updateToken = async (): Promise<ITokenJSON | Error> => {
     }
 }
 
-interface IUserInfoJSON {
+export interface IUserInfoJSON {
     readonly success: boolean;
     readonly user: IUser;
 }
