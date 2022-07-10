@@ -11,6 +11,8 @@ import {TConstructorActions} from "./services/actions/constructor";
 import {TIngredientsActions} from "./services/actions/ingredients";
 import {TModalAction} from "./services/actions/modal";
 import { Action, ActionCreator, Dispatch } from 'redux';
+import { socketMiddleware } from './services/wsSocketMiddleware';
+import {TFeedActions} from "./services/actions/feed";
 declare global {
     interface Window {
         __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -18,7 +20,7 @@ declare global {
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const enhancer = composeEnhancers(applyMiddleware(thunk));
+const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware()));
 const store = createStore(rootReducer, enhancer);
 export type RootState = ReturnType<typeof store.getState>;
 type TApplicationActions =
@@ -26,7 +28,8 @@ type TApplicationActions =
     | TRecoverPasswordActions
     | TConstructorActions
     | TIngredientsActions
-    | TModalAction;
+    | TModalAction
+    | TFeedActions;
 export type AppThunk<TReturn = void> = ActionCreator<ThunkAction<TReturn, Action, RootState, TApplicationActions>>;
 export type AppDispatch = Dispatch<TApplicationActions>;
 

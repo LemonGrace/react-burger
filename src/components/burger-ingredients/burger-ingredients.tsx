@@ -8,7 +8,7 @@ import {useDrag} from "react-dnd";
 import {useHistory, useLocation} from "react-router-dom";
 import {History, Location} from "history";
 
-interface IIngredientCard {
+export interface IIngredientCard {
     item: IIngredient,
     count: number
 }

@@ -5,6 +5,11 @@ import ProfileNav from "../../components/profile-nav/profile-nav";
 import styles from "./profile.module.css"
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import clsx from "clsx";
+import {useRouteMatch} from "react-router-dom";
+import OrderInfoCard from "../../components/order-info/order-info";
+import * as uuid from "uuid";
+import {WS_CONNECTION_START} from "../../services/constants/webSocket";
+import Loading from "../../components/loading/loading";
 
 export interface IUserInfo {
     name: string;
@@ -68,16 +73,39 @@ const ProfileData = () => {
     )
 }
 
+const ProfileOrders = () => {
+    const {orders} = useSelector(state => state.feed);
+    if (orders.length === 0) {
+        return (<Loading/>);
+    }
+    return (
+        <div className={clsx(styles.feedPageOrdersWrapper, "pr-2 ml-15")}>
+            {orders.map((order) => {
+                return <OrderInfoCard key={uuid.v4()} order={order} IsShowStatus={true}/>
+            })}
+        </div>
+    )
+}
+
 function ProfilePage() {
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        dispatch({ type: WS_CONNECTION_START, IsPersonal: true });
+    }, [dispatch])
+    const isFeedOrders: boolean = !!useRouteMatch("/profile/orders");
+    const innerText = isFeedOrders ?
+        `В этом разделе вы можете просмотреть свою историю заказов`
+        : `В этом разделе вы можете изменить свои персональные данные`;
     return (
         <main className={clsx(styles.wrapper, "mt-30")}>
             <section className={styles.sectionWrapper}>
                 <ProfileNav/>
                 <div className={"mt-20 text_type_main-small text_color_inactive"}>
-                    В этом разделе вы можете изменить свои персональные данные
+                    {innerText}
                 </div>
             </section>
-            <ProfileData/>
+            {!isFeedOrders && <ProfileData/>}
+            {isFeedOrders && <ProfileOrders/>}
         </main>
     )
 }

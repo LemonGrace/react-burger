@@ -7,7 +7,6 @@ export function getCookie(name: string): string | undefined {
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-//TODO : props это что?
 interface ICookieProps {
     [name: string]: any;
 }

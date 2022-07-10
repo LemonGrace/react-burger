@@ -1,5 +1,5 @@
 import {INGREDIENTS_REQUEST, INGREDIENTS_SUCCESS, INGREDIENTS_ERROR} from '../constants/ingredients';
-import {SET_VISIBLE, DELETE_VISIBLE} from "../constants/modal";
+import {SET_VISIBLE, DELETE_VISIBLE, SET_TYPE, DELETE_TYPE} from "../constants/modal";
 import {TIngredientsActions} from "../actions/ingredients";
 import {TModalAction} from "../actions/modal";
 import { IIngredient } from '../../utils/type';
@@ -37,9 +37,11 @@ export const burgerIngredient = (state = initialState, action: TIngredientsActio
 /** редьюсер для работы с модальным окном */
 type TModal = {
     isVisible: boolean,
+    typeModal: string;
 };
 const initialStateModal: TModal = {
     isVisible: false,
+    typeModal: ``,
 }
 export const modal = (state = initialStateModal, action: TModalAction) => {
     switch (action.type) {
@@ -48,6 +50,12 @@ export const modal = (state = initialStateModal, action: TModalAction) => {
         }
         case DELETE_VISIBLE: {
             return { ...state, isVisible: false };
+        }
+        case SET_TYPE: {
+            return {...state, typeModal: action.typeModal};
+        }
+        case DELETE_TYPE: {
+            return {...state, typeModal: ``};
         }
         default: return state;
     }

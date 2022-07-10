@@ -12,7 +12,7 @@ function AppHeader() {
         path: "/",
         exact: true,
     });
-    const isHistoryOrderPageActive: boolean = !!useRouteMatch("/order");
+    const isHistoryOrderPageActive: boolean = !!useRouteMatch("/feed");
     const isProfilePageActive: boolean = !!useRouteMatch("/profile");
 
     return (
@@ -27,7 +27,7 @@ function AppHeader() {
                         <BurgerIcon type={isMainPageActive ? "primary" : "secondary"}/>
                         <span className="pl-2">Конструктор</span>
                     </NavLink>
-                    <NavLink to={'/'}
+                    <NavLink to={'/feed'}
                              exact={true}
                              activeClassName={styles.active}
                              className={clsx(styles.li, "text_type_main-default pl-5 pr-5 text_color_inactive")}

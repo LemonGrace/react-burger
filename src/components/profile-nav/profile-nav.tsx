@@ -35,7 +35,7 @@ function ProfileNav() {
             </div>
             <div className={styles.linkBlock}>
                 <NavLink
-                    to="/profile/order"
+                    to="/profile/orders"
                     activeClassName={styles.active}
                     className={clsx(styles.link, "text_type_main-medium text_color_inactive")}
                 >

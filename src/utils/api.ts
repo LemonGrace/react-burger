@@ -1,6 +1,6 @@
 import {authUrl, BaseUrl} from "./baseUrl";
 import {getCookie, setCookie} from "./cookie";
-import {IIngredient, IOrderItem} from "./type";
+import {IIngredient, IOrderFeed, IOrderItem} from "./type";
 import {IUserInfo} from "../pages/profile/profile";
 import {IForgotPasswordFields} from "../pages/forgot-password/forgot-password";
 import {ILoginFields} from "../pages/login/login";
@@ -27,6 +27,22 @@ export const getBurgerData = async (): Promise<IIngredientJson | Error> => {
         return response.json();
     }
     catch (e) {
+        throw new Error("response is not ok");
+    }
+}
+
+interface IOrderInfoJSON {
+    success: boolean;
+    orders: Array<IOrderFeed>
+}
+
+export const getOrderInfo = async (number: number): Promise<IOrderInfoJSON | Error> => {
+    try {
+        const url: string = BaseUrl + "orders/" + number.toString();
+        const response: Response = await fetch(url);
+        checkResponse(response);
+        return response.json();
+    } catch (e) {
         throw new Error("response is not ok");
     }
 }

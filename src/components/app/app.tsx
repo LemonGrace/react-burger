@@ -1,6 +1,6 @@
 import React from 'react';
 import AppHeader from '../app-header/app-header';
-import {Switch, Route, useLocation} from 'react-router-dom';
+import {Switch, Route, useLocation, useRouteMatch} from 'react-router-dom';
 import HomePage from "../../pages/home/home";
 import LoginPage from "../../pages/login/login";
 import RegistrationPage from "../../pages/registration/registration";
@@ -17,11 +17,25 @@ import clsx from "clsx";
 import {getUser} from "../../services/actions/auth";
 import {Location} from "history";
 import {getIngredients} from "../../services/actions/ingredients";
+import FeedPage from "../../pages/feed/feed-page";
+import OrderInfoDetails from "../order-info-details/order-info-details";
 
+interface MatchParams {
+    id: string;
+}
 
 const Main = () => {
     const location: Location = useLocation();
     const background: Location = location.state && (location.state as any).background;
+    let id: string = ``;
+    let matchProfile = useRouteMatch<MatchParams>("/profile/:id");
+    if (matchProfile) {
+        id = matchProfile.params.id;
+    }
+    let matchFeed = useRouteMatch<MatchParams>("/feed/:id");
+    if (matchFeed) {
+        id = matchFeed.params.id
+    }
     return (
         <>
             <Switch location={background || location}>
@@ -33,6 +47,15 @@ const Main = () => {
                         <span className={clsx("text_type_main-large", styles.modalHeader)}> Детали ингредиента</span>
                         <IngredientDetails/>
                     </div>
+                </Route>
+                <Route path="/feed/:id">
+                    <div className={clsx(styles.modalCenterOrderInfo )}>
+                        <span className={clsx("text_type_main-medium")}>#{id}</span>
+                        <OrderInfoDetails/>
+                    </div>
+                </Route>
+                <Route path="/feed">
+                    <FeedPage/>
                 </Route>
                 <ProtectedRoute path="/login">
                     <LoginPage/>
@@ -46,6 +69,12 @@ const Main = () => {
                 <ProtectedRoute path="/reset-password">
                     <PasswordResetPage/>
                 </ProtectedRoute>
+                <ProtectedRoute isForAuthUser={true} path="/profile/orders/:id">
+                    <div className={clsx(styles.modalCenterOrderInfo )}>
+                        <span className={clsx("text_type_main-medium")}>#{id}</span>
+                        <OrderInfoDetails/>
+                    </div>
+                </ProtectedRoute>
                 <ProtectedRoute isForAuthUser={true} path="/profile">
                     <ProfilePage/>
                 </ProtectedRoute>
@@ -53,6 +82,16 @@ const Main = () => {
             {
                 background && (<Route path="/ingredients/:id">
                     <Modal caption={"Детали ингредиента"}><IngredientDetails/></Modal>
+                </Route>)
+            }
+            {
+                background && (<Route path="/feed/:id">
+                    <Modal caption={`#${id}`}><OrderInfoDetails/></Modal>
+                </Route>)
+            }
+            {
+                background && (<Route path="/profile/:id">
+                    <Modal caption={`#${id}`}><OrderInfoDetails/></Modal>
                 </Route>)
             }
         </>

@@ -1,0 +1,47 @@
+.statusColor {
+    color: #00CCCC;
+}
+
+.infoCreateAnsSum {
+    display: flex;
+    justify-content: space-between;
+}
+
+.infoSum {
+    display: flex;
+    align-items: center;
+}
+
+.ingredientInfoContainerWrapper {
+    height: 256px;
+    overflow-y: scroll;
+}
+.ingredientInfoContainerWrapper::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2F2F37;
+}
+.ingredientInfoContainerWrapper::-webkit-scrollbar-thumb{
+    background: #8585AD;
+}
+
+.ingredientInfoContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ingredientImageWrapper {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ingredientImage {
+    width: 60px;
+    height: 60px;
+    background: #131316;
+    border-radius: 100px;
+    object-fit: cover;
+}
