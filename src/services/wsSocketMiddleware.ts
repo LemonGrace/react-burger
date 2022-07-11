@@ -1,9 +1,9 @@
-import {TWebSocketActions} from "./actions/webSocket";
+import {TWebSocketActions, TWSActions} from "./actions/webSocket";
 import {TFeedOrdersWS} from "../utils/type";
 import { Middleware, MiddlewareAPI } from 'redux';
 import {AppDispatch, RootState } from '..';
 
-export const socketMiddleware = (wsActions: any): Middleware => {
+export const socketMiddleware = (wsActions: TWSActions): Middleware => {
     return (store: MiddlewareAPI<AppDispatch, RootState>) => {
         let socket: WebSocket;
         return (next: any) => (action: TWebSocketActions) => {
