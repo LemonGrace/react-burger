@@ -10,7 +10,7 @@ import {
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDispatch, useSelector} from "../../utils/hooks";
-import {openModal} from "../../services/actions/modal";
+import {closeModal, openModal} from "../../services/actions/modal";
 import {useDrag, useDrop} from "react-dnd";
 import {
     ADD_INGREDIENT,
@@ -133,6 +133,10 @@ function BurgerConstructor() {
     /** Подсветка области, если мало или вообще нет элементов в заказе */
     const needShowDrop: string = content.length < 3 ? isHover ? styles.canDrop : "" : "";
 
+    const handleClose = (): void => {
+        dispatch(closeModal());
+    }
+
     const handleClick = (): void => {
         if (isAuth) {
             dispatch(openModal(content));
@@ -166,7 +170,7 @@ function BurgerConstructor() {
                 </div>
             }
             {isVisible &&
-                <Modal caption={""}>
+                <Modal caption={""} onClose={handleClose}>
                     <OrderDetails/>
                 </Modal>}
             <div className={clsx("mt-10 mr-4 mb-10", styles.finalContainer, styles.container)}>

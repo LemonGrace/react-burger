@@ -1,6 +1,6 @@
 import React from 'react';
 import AppHeader from '../app-header/app-header';
-import {Switch, Route, useLocation, useRouteMatch} from 'react-router-dom';
+import {Switch, Route, useLocation, useRouteMatch, useHistory} from 'react-router-dom';
 import HomePage from "../../pages/home/home";
 import LoginPage from "../../pages/login/login";
 import RegistrationPage from "../../pages/registration/registration";
@@ -15,7 +15,7 @@ import {useDispatch, useSelector} from "../../utils/hooks";
 import styles from '../modal/modal.module.css';
 import clsx from "clsx";
 import {getUser} from "../../services/actions/auth";
-import {Location} from "history";
+import {History, Location} from "history";
 import {getIngredients} from "../../services/actions/ingredients";
 import FeedPage from "../../pages/feed/feed-page";
 import OrderInfoDetails from "../order-info-details/order-info-details";
@@ -26,6 +26,7 @@ interface MatchParams {
 
 const Main = () => {
     const location: Location = useLocation();
+    const history: History = useHistory();
     const background: Location = location.state && (location.state as any).background;
     let id: string = ``;
     let matchProfile = useRouteMatch<MatchParams>("/profile/:id");
@@ -36,6 +37,10 @@ const Main = () => {
     if (matchFeed) {
         id = matchFeed.params.id
     }
+    const handleClose = (): void => {
+        history.goBack();
+    }
+
     return (
         <>
             <Switch location={background || location}>
@@ -81,17 +86,17 @@ const Main = () => {
             </Switch>
             {
                 background && (<Route path="/ingredients/:id">
-                    <Modal caption={"Детали ингредиента"}><IngredientDetails/></Modal>
+                    <Modal caption={"Детали ингредиента"} onClose={handleClose}><IngredientDetails/></Modal>
                 </Route>)
             }
             {
                 background && (<Route path="/feed/:id">
-                    <Modal caption={`#${id}`}><OrderInfoDetails/></Modal>
+                    <Modal caption={`#${id}`} onClose={handleClose}><OrderInfoDetails/></Modal>
                 </Route>)
             }
             {
                 background && (<Route path="/profile/:id">
-                    <Modal caption={`#${id}`}><OrderInfoDetails/></Modal>
+                    <Modal caption={`#${id}`} onClose={handleClose}><OrderInfoDetails/></Modal>
                 </Route>)
             }
         </>

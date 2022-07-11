@@ -35,7 +35,7 @@ export const order = (state = initialStateOrder, action: TConstructorActions) =>
             return { ...state, orderFailed: true, orderRequest: false };
         }
         case DELETE_ORDER: {
-            return {...state, order: null};
+            return {...state, order: null, content: []};
         }
         case ADD_INGREDIENT: {
             let arr = [...state.content];
