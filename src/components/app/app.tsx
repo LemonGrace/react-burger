@@ -95,7 +95,7 @@ const Main = () => {
                 </Route>)
             }
             {
-                background && (<Route path="/profile/:id">
+                background && (<Route path="/profile/orders/:id">
                     <Modal caption={`#${id}`} onClose={handleClose}><OrderInfoDetails/></Modal>
                 </Route>)
             }

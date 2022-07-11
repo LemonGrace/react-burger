@@ -90,6 +90,9 @@ export const getUser: AppThunk = () => (dispatch: AppDispatch) => {
     });
     getUserInfo().then(res => {
         if (res instanceof Error) {
+            dispatch({
+                type: USER_REQUEST_ERROR
+            });
             return;
         }
         if (res && res.success) {

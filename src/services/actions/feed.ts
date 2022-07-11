@@ -41,6 +41,9 @@ export const getOrderInfoDetails: AppThunk = (number: number) => (dispatch: AppD
     });
     getOrderInfo(number).then(res => {
         if (res instanceof Error) {
+            dispatch({
+                type: GET_ORDER_ERROR
+            });
             return;
         }
         if (res && res.success) {
