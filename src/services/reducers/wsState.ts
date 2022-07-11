@@ -6,15 +6,11 @@ import {
     WS_GET_MESSAGE,
     WS_SEND_MESSAGE
 } from "../constants/webSocket";
-
-export interface IMessage {
-    name: string;
-    message: string;
-}
+import {TFeedOrdersData} from "../../utils/type";
 
 type TWSState = {
     wsConnected: boolean;
-    messages: any;
+    messages: Array<TFeedOrdersData>;
 };
 const initialState: TWSState = {
     wsConnected: false,
@@ -32,17 +28,23 @@ export const wsReducer = (state = initialState, action: TWebSocketActions) => {
         case WS_CONNECTION_ERROR:
             return {
                 ...state,
-                wsConnected: false
+                wsConnected: false,
+                messages: [],
             };
 
         case WS_CONNECTION_CLOSED:
             return {
                 ...state,
-                wsConnected: false
+                wsConnected: false,
+                messages: [],
             };
 
-        case WS_GET_MESSAGE:
-            return state;
+        case WS_GET_MESSAGE: {
+            return {
+                ...state,
+                messages:  [...state.messages, { ...action.payload }]
+            };
+        }
 
         case WS_SEND_MESSAGE:
         default:

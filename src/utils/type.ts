@@ -34,6 +34,12 @@ export type TFeedOrdersWS = {
     totalToday: number
 };
 
+export type TFeedOrdersData = {
+    orders: Array<IOrderFeed>,
+    total: number,
+    totalToday: number
+};
+
 export type TFeedOrders = {
     orders: Array<IOrderFeed>,
     total: number,

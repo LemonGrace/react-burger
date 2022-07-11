@@ -1,4 +1,4 @@
-import {IOrderFeed, TFeedOrders} from "../../utils/type";
+import {IOrderFeed, TFeedOrdersData} from "../../utils/type";
 import {
     DELETE_ORDERS,
     GET_ORDER_ERROR,
@@ -12,7 +12,7 @@ import {getOrderInfo} from "../../utils/api";
 
 export interface ISetOrdersAction {
     readonly type: typeof SET_ORDERS;
-    readonly data: TFeedOrders
+    readonly data: TFeedOrdersData
 }
 export interface IDeleteOrdersAction {
     readonly type: typeof DELETE_ORDERS;

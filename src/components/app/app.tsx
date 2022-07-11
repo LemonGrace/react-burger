@@ -29,7 +29,7 @@ const Main = () => {
     const history: History = useHistory();
     const background: Location = location.state && (location.state as any).background;
     let id: string = ``;
-    let matchProfile = useRouteMatch<MatchParams>("/profile/:id");
+    let matchProfile = useRouteMatch<MatchParams>("/profile/orders/:id");
     if (matchProfile) {
         id = matchProfile.params.id;
     }

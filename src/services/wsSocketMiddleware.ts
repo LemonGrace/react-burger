@@ -1,54 +1,42 @@
-import {
-    WS_CONNECTION_CLOSED,
-    WS_CONNECTION_ERROR,
-    WS_CONNECTION_START,
-    WS_CONNECTION_SUCCESS,
-} from './constants/webSocket'
 import {TWebSocketActions} from "./actions/webSocket";
-import {ordersBaseUrl} from "../utils/baseUrl";
 import {TFeedOrdersWS} from "../utils/type";
-import {DELETE_ORDERS, SET_ORDERS} from "./constants/feed";
-import {getCookie} from "../utils/cookie";
+import { Middleware, MiddlewareAPI } from 'redux';
+import {AppDispatch, RootState } from '..';
 
-export const socketMiddleware = () => {
-    return (store: any) => {
+export const socketMiddleware = (wsActions: any): Middleware => {
+    return (store: MiddlewareAPI<AppDispatch, RootState>) => {
         let socket: WebSocket;
         return (next: any) => (action: TWebSocketActions) => {
             const { dispatch} = store;
-
-            if (action.type === WS_CONNECTION_START) {
-                const {IsPersonal} = action;
-                let url = ordersBaseUrl;
-                if (!IsPersonal) {
-                    url = url + '/all';
-                } else {
-                    const accessToken = getCookie('token');
-                    url += `?token=${accessToken}`;
-                }
-                socket = new WebSocket(url);
+            const { type, payload } = action;
+            const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage } = wsActions;
+            if (type === wsInit) {
+                socket = new WebSocket(payload);
             }
             if (socket) {
                 socket.onopen = event => {
-                    dispatch({type: WS_CONNECTION_SUCCESS});
+                    dispatch({type: onOpen, payload: event});
                 };
 
                 socket.onerror = event => {
-                    dispatch({type: WS_CONNECTION_ERROR});
-                    dispatch({type: DELETE_ORDERS});
+                    dispatch({type: onError, payload: event});
                 };
 
                 socket.onmessage = event => {
                     const { data } = event;
                     const parsedData: TFeedOrdersWS = JSON.parse(data);
                     if (parsedData.success) {
-                        const {success, ...data} = parsedData;
-                        dispatch({type: SET_ORDERS, data: data});
+                        const { success, ...restParsedData } = parsedData;
+                        dispatch({ type: onMessage, payload: restParsedData });
                     }
                 };
                 socket.onclose = event => {
-                    dispatch({type: WS_CONNECTION_CLOSED});
-                    dispatch({type: DELETE_ORDERS});
+                    dispatch({type: onClose, payload: event});
                 };
+                if (type === wsSendMessage) {
+                    const message = { ...payload };
+                    socket.send(JSON.stringify(message));
+                }
             }
 
             next(action);

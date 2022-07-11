@@ -1,32 +1,33 @@
-import React, {FC, useMemo} from "react";
+import React, {FC} from "react";
 import styles from './feed-page.module.css';
 import clsx from "clsx";
 import * as uuid from "uuid";
 import {useDispatch, useSelector} from "../../utils/hooks";
 import OrderInfoCard from "../../components/order-info/order-info";
 import Loading from "../../components/loading/loading";
-import {WS_CONNECTION_START} from "../../services/constants/webSocket";
+import {wsConnectionClosed, wsConnectionStart} from "../../services/actions/webSocket";
+import {ordersBaseUrl} from "../../utils/baseUrl";
 
 const FeedPage: FC<{}> = () => {
 
     const dispatch = useDispatch();
     React.useEffect(() => {
-        dispatch({ type: WS_CONNECTION_START, IsPersonal: false });
+        dispatch(wsConnectionStart(ordersBaseUrl + `/all`));
+        return () => {
+            dispatch(wsConnectionClosed());
+        }
     }, [dispatch])
-    const {orders, total, totalToday} = useSelector(state => state.feed);
-    const pending = useMemo(() => {
-        return orders.filter(order => (order.status === 'pending' || order.status === 'created'));
-    }, [orders])
-    const ready = useMemo(() => {
-        return orders.filter(order => order.status === 'done');
-    }, [orders])
+    const {messages} = useSelector(state => state.wsReducer);
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage) {
+        return (<Loading/>);
+    }
+    const {orders, total, totalToday} = lastMessage;
+    const pending = orders.filter(order => (order.status === 'pending' || order.status === 'created'));
+    const ready =  orders.filter(order => order.status === 'done');
 
-    const needBigContainerPending = useMemo(() => {
-        return pending.length > 9;
-    }, [pending]);
-    const needBigContainerReady = useMemo(() => {
-        return ready.length > 9;
-    }, [ready]);
+    const needBigContainerPending = pending.length > 9;
+    const needBigContainerReady = ready.length > 9;
 
     if (orders.length === 0) {
         return (<Loading/>);

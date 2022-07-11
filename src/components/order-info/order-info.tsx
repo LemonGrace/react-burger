@@ -40,7 +40,7 @@ const OrderInfoCard: FC<{order: IOrderFeed, IsShowStatus: boolean}> = ({order, I
     const location: Location = useLocation();
     const handleClick = (): void => {
         history.push({
-            pathname: IsShowStatus ? `/profile/${order.number}` : `/feed/${order.number}`,
+            pathname: IsShowStatus ? `/profile/orders/${order.number}` : `/feed/${order.number}`,
             state: { background: location },
         });
     }
@@ -49,7 +49,9 @@ const OrderInfoCard: FC<{order: IOrderFeed, IsShowStatus: boolean}> = ({order, I
         <div className={clsx(styles.card, "p-6")} onClick={handleClick}>
             <div className={clsx(styles.cardInfo, "mb-6")}>
                 <p className="text text_type_digits-default">#{order.number}</p>
-                <p className="text text_type_main-default text_color_inactive">{order.createdAt}</p>
+                <p className="text text_type_main-default text_color_inactive">
+                    {new Date(order.createdAt).toLocaleString()}
+                </p>
             </div>
             <p className={clsx("text text_type_main-medium mb-2", !IsShowStatus && "mb-6")}>
                 {order.name}

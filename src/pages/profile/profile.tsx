@@ -8,8 +8,10 @@ import clsx from "clsx";
 import {useRouteMatch} from "react-router-dom";
 import OrderInfoCard from "../../components/order-info/order-info";
 import * as uuid from "uuid";
-import {WS_CONNECTION_START} from "../../services/constants/webSocket";
 import Loading from "../../components/loading/loading";
+import {wsConnectionClosed, wsConnectionStart} from "../../services/actions/webSocket";
+import {ordersBaseUrl} from "../../utils/baseUrl";
+import { getCookie } from "../../utils/cookie";
 
 export interface IUserInfo {
     name: string;
@@ -74,7 +76,12 @@ const ProfileData = () => {
 }
 
 const ProfileOrders = () => {
-    const {orders} = useSelector(state => state.feed);
+    const {messages} = useSelector(state => state.wsReducer);
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage) {
+        return (<Loading/>);
+    }
+    const {orders} = lastMessage;
     if (orders.length === 0) {
         return (<Loading/>);
     }
@@ -89,9 +96,13 @@ const ProfileOrders = () => {
 
 function ProfilePage() {
     const dispatch = useDispatch();
+    const accessToken = getCookie('token');
     React.useEffect(() => {
-        dispatch({ type: WS_CONNECTION_START, IsPersonal: true });
-    }, [dispatch])
+        dispatch(wsConnectionStart(ordersBaseUrl + `?token=${accessToken}`));
+        return () => {
+            dispatch(wsConnectionClosed());
+        }
+    }, [dispatch, accessToken])
     const isFeedOrders: boolean = !!useRouteMatch("/profile/orders");
     const innerText = isFeedOrders ?
         `В этом разделе вы можете просмотреть свою историю заказов`

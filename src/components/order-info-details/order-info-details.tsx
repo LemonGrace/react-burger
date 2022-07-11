@@ -32,7 +32,6 @@ function OrderInfoDetails() {
             }
             return ingredient;
         });
-
     }
     allIngredientsInOrder.map((data) => {
         if (!uniqueIngredientsInOrder.find(value => data._id === value.item._id)) {
@@ -103,7 +102,9 @@ function OrderInfoDetails() {
             </div>
 
             <div className={styles.infoCreateAnsSum}>
-                <p className="text text_type_main-default text_color_inactive">{orderSelected.createdAt}</p>
+                <p className="text text_type_main-default text_color_inactive">
+                    {new Date(orderSelected.createdAt).toLocaleString()}
+                </p>
                 <p className={clsx(styles.infoSum, "text text_type_digits-default")}>
                     <span className={"mr-2"}>{sum}</span>
                     <CurrencyIcon type="primary" />
