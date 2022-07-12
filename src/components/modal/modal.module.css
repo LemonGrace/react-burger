@@ -27,6 +27,14 @@
     flex-direction: column;
 }
 
+.modalCenterOrderInfo {
+    margin: 0 auto;
+    width: 640px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
 .modalCloseIconAlign {
     justify-content: flex-end;
 }

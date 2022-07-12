@@ -1,10 +1,17 @@
 import React, {ChangeEvent, useCallback} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "../../utils/hooks";
 import {getUser, updateInfo} from "../../services/actions/auth";
 import ProfileNav from "../../components/profile-nav/profile-nav";
 import styles from "./profile.module.css"
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import clsx from "clsx";
+import {useRouteMatch} from "react-router-dom";
+import OrderInfoCard from "../../components/order-info/order-info";
+import * as uuid from "uuid";
+import Loading from "../../components/loading/loading";
+import {wsConnectionClosed, wsConnectionStart} from "../../services/actions/webSocket";
+import {ordersBaseUrl} from "../../utils/baseUrl";
+import { getCookie } from "../../utils/cookie";
 
 export interface IUserInfo {
     name: string;
@@ -14,12 +21,8 @@ export interface IUserInfo {
 
 const ProfileData = () => {
     /** Получение и сохранение данных о пользователе*/
-    const dispatch: any = useDispatch();
-    const {username, email, isAuth, isUserLoading}: {
-        username: string, email: string,
-        isAuth: boolean, isUserLoading: boolean
-    }
-        = useSelector(state => (state as any).user);
+    const dispatch = useDispatch();
+    const {username, email, isAuth, isUserLoading} = useSelector(state => state.user);
 
     if (!username && !email && isAuth) {
         if (!isUserLoading) dispatch(getUser());
@@ -72,16 +75,48 @@ const ProfileData = () => {
     )
 }
 
+const ProfileOrders = () => {
+    const {messages} = useSelector(state => state.wsReducer);
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage) {
+        return (<Loading/>);
+    }
+    const {orders} = lastMessage;
+    if (orders.length === 0) {
+        return (<Loading/>);
+    }
+    return (
+        <div className={clsx(styles.feedPageOrdersWrapper, "pr-2 ml-15")}>
+            {orders.map((order) => {
+                return <OrderInfoCard key={uuid.v4()} order={order} IsShowStatus={true}/>
+            })}
+        </div>
+    )
+}
+
 function ProfilePage() {
+    const dispatch = useDispatch();
+    const accessToken = getCookie('token');
+    React.useEffect(() => {
+        dispatch(wsConnectionStart(ordersBaseUrl + `?token=${accessToken}`));
+        return () => {
+            dispatch(wsConnectionClosed());
+        }
+    }, [dispatch, accessToken])
+    const isFeedOrders: boolean = !!useRouteMatch("/profile/orders");
+    const innerText = isFeedOrders ?
+        `В этом разделе вы можете просмотреть свою историю заказов`
+        : `В этом разделе вы можете изменить свои персональные данные`;
     return (
         <main className={clsx(styles.wrapper, "mt-30")}>
             <section className={styles.sectionWrapper}>
                 <ProfileNav/>
                 <div className={"mt-20 text_type_main-small text_color_inactive"}>
-                    В этом разделе вы можете изменить свои персональные данные
+                    {innerText}
                 </div>
             </section>
-            <ProfileData/>
+            {!isFeedOrders && <ProfileData/>}
+            {isFeedOrders && <ProfileOrders/>}
         </main>
     )
 }

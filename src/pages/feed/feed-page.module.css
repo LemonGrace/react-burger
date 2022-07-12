@@ -1,0 +1,50 @@
+.feedPage {
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.feedPageContainer {
+    display: flex;
+}
+.numberColor {
+    color: #F2F2F3;
+    text-shadow: 0 0 16px rgba(51, 51, 255, 0.25), 0 0 8px rgba(51, 51, 255, 0.25), 0 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.feedPageOrderStatusWrapper {
+    display: flex;
+}
+
+.feedPageStatusContainer {
+    max-height: 320px;
+}
+
+.feedPageStatusContainerBig {
+    column-width: 80px;
+    column-gap: 0;
+    column-fill: auto;
+    width: 450px;
+}
+
+.orderNumber {
+    height: 24px;
+    color: #00CCCC;
+}
+
+.feedPageOrdersWrapper {
+    width: 608px;
+    max-height: calc(100vh - 200px);
+    overflow-y: scroll;
+    position: relative;
+    scroll-behavior: smooth;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-row-gap: 16px;
+}
+.feedPageOrdersWrapper::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2F2F37;
+}
+.feedPageOrdersWrapper::-webkit-scrollbar-thumb{
+    background: #8585AD;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import {useSelector} from "react-redux";
+import {useSelector} from "../../utils/hooks";
 import {DndProvider} from "react-dnd";
 import BurgerIngredients from "../../components/burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../../components/burger-constructor/burger-constructor";
@@ -10,8 +10,8 @@ import Loading from "../../components/loading/loading";
 
 function HomePage() {
     /** Получение данных об ингредиентах */
-    const {isIngredientsLoading, isIngredientsFailed}: {isIngredientsLoading: boolean, isIngredientsFailed: boolean}
-        = useSelector((state) => (state as any).burgerIngredient);
+    const {isIngredientsLoading, isIngredientsFailed}
+        = useSelector(state => state.burgerIngredient);
 
     if (isIngredientsLoading || isIngredientsFailed) {
         return (<Loading/>)

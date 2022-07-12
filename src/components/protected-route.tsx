@@ -1,5 +1,5 @@
 import React, {FC, ReactNode } from "react";
-import {useSelector} from "react-redux";
+import {useSelector} from "../utils/hooks";
 import {Route, Redirect} from 'react-router-dom';
 import Loading from "./loading/loading";
 import {Location} from "history";
@@ -32,8 +32,7 @@ interface IProtectedRouteProps {
 
 function ProtectedRoute({isForAuthUser = false, children, ...rest}: IProtectedRouteProps) {
 
-    const {isAuth, isUserLoading}: {isAuth: boolean, isUserLoading: boolean}
-        = useSelector(state => (state as any).user);
+    const {isAuth, isUserLoading} = useSelector(state => state.user);
 
     const renderComponent = React.useMemo(() => {
         if (isForAuthUser && !isAuth) {

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useCallback, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "../../utils/hooks";
 import {Link, useHistory} from "react-router-dom";
 import styles from './forgot-password.module.css';
 import clsx from "clsx";
@@ -16,9 +16,7 @@ export interface IForgotPasswordFields {
 function ForgotPasswordPage() {
 
     /** Получение данных об успешной отправки кода на email и переадресация */
-    const {isRequestLoading, isRequestFailed, isEmailSend}:
-        { isRequestLoading: boolean, isRequestFailed: boolean, isEmailSend: boolean }
-        = useSelector(state => (state as any).resetPassword);
+    const {isRequestLoading, isRequestFailed, isEmailSend} = useSelector(state => state.resetPassword);
     const canGoToNextStep: boolean = !isRequestLoading && !isRequestFailed && isEmailSend;
     const history: History = useHistory();
 
@@ -33,7 +31,7 @@ function ForgotPasswordPage() {
     };
 
     /** Отправка письма на почту */
-    const dispatch: any = useDispatch();
+    const dispatch = useDispatch();
     const reset = useCallback(
         (e: React.SyntheticEvent): void => {
             e.preventDefault();

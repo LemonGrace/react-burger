@@ -3,7 +3,7 @@ import {Button, EmailInput, PasswordInput} from "@ya.praktikum/react-developer-b
 import styles from './login.module.css'
 import clsx from "clsx";
 import {Link} from 'react-router-dom';
-import {useDispatch} from "react-redux";
+import {useDispatch} from "../../utils/hooks";
 import {enter} from "../../services/actions/auth";
 
 export interface ILoginFields {
@@ -24,7 +24,7 @@ function LoginPage() {
     };
 
     /** Авторизация пользователя */
-    const dispatch: any = useDispatch();
+    const dispatch = useDispatch();
     const login = useCallback(
         (e: React.SyntheticEvent): void => {
             e.preventDefault();

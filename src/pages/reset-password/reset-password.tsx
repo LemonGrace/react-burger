@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useCallback, useState} from "react";
 import {deleteCookie} from "../../utils/cookie";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "../../utils/hooks";
 import {Link, Redirect, useHistory, useLocation} from "react-router-dom";
 import clsx from "clsx";
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
@@ -25,17 +25,16 @@ function PasswordResetPage() {
     const [form, setValue] = useState<IResetPasswordFields>(initialState);
 
     const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        setValue({ ...form, [e.target.name]: e.target.value });
+        setValue({...form, [e.target.name]: e.target.value});
     };
 
-    const {isRequestLoading, isRequestFailed, isPasswordReset}:
-        { isRequestLoading: boolean, isRequestFailed: boolean, isPasswordReset: boolean }
-        = useSelector(state => (state as any).resetPassword);
+    const {isRequestLoading, isRequestFailed, isPasswordReset}
+        = useSelector(state => state.resetPassword);
     const canGoToNextStep: boolean = !isRequestLoading && !isRequestFailed && isPasswordReset;
     const history: History = useHistory();
 
     /** Установка нового пароля */
-    const dispatch: any = useDispatch();
+    const dispatch = useDispatch();
     const reset = useCallback(
         (e: React.SyntheticEvent) => {
             e.preventDefault();
@@ -95,4 +94,5 @@ function PasswordResetPage() {
     );
 
 }
+
 export default React.memo(PasswordResetPage);

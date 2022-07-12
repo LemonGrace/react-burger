@@ -1,6 +1,6 @@
 import {authUrl, BaseUrl} from "./baseUrl";
 import {getCookie, setCookie} from "./cookie";
-import {IIngredient, IOrderItem} from "./type";
+import {IIngredient, IOrderFeed, IOrderItem} from "./type";
 import {IUserInfo} from "../pages/profile/profile";
 import {IForgotPasswordFields} from "../pages/forgot-password/forgot-password";
 import {ILoginFields} from "../pages/login/login";
@@ -27,6 +27,22 @@ export const getBurgerData = async (): Promise<IIngredientJson | Error> => {
         return response.json();
     }
     catch (e) {
+        throw new Error("response is not ok");
+    }
+}
+
+interface IOrderInfoJSON {
+    success: boolean;
+    orders: Array<IOrderFeed>
+}
+
+export const getOrderInfo = async (number: number): Promise<IOrderInfoJSON | Error> => {
+    try {
+        const url: string = BaseUrl + "orders/" + number.toString();
+        const response: Response = await fetch(url);
+        checkResponse(response);
+        return response.json();
+    } catch (e) {
         throw new Error("response is not ok");
     }
 }
@@ -77,7 +93,7 @@ export const createOrder = async (ingredients: Array<IOrderItem>): Promise<IOrde
     }
 }
 
-interface IUser {
+export interface IUser {
     readonly name: string;
     readonly email: string;
 }
@@ -194,7 +210,7 @@ const updateToken = async (): Promise<ITokenJSON | Error> => {
     }
 }
 
-interface IUserInfoJSON {
+export interface IUserInfoJSON {
     readonly success: boolean;
     readonly user: IUser;
 }
@@ -221,11 +237,11 @@ export const getUserInfo = async (): Promise<IUserInfoJSON | undefined | Error> 
         try {
             /** Обновление токена, если на тот запрос выпала ошибка */
             updateToken().then(async res => {
-                if (res instanceof Error) {
-                    return;
-                }
+                //@ts-ignore
                 if (res && res.success) {
+                    //@ts-ignore
                     setCookie('refreshToken', res.refreshToken);
+                    //@ts-ignore
                     setCookie('token', res.accessToken.split('Bearer ')[1]);
                     const response: Response = await fetch(url, {
                         method: 'GET',
@@ -243,7 +259,7 @@ export const getUserInfo = async (): Promise<IUserInfoJSON | undefined | Error> 
                     return response.json();
                 }
             }).catch(e => {
-                throw new Error("response is not ok")
+
             });
         }
         catch (e) {
