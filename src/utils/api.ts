@@ -237,11 +237,11 @@ export const getUserInfo = async (): Promise<IUserInfoJSON | undefined | Error> 
         try {
             /** Обновление токена, если на тот запрос выпала ошибка */
             updateToken().then(async res => {
-                if (res instanceof Error) {
-                    return;
-                }
+                //@ts-ignore
                 if (res && res.success) {
+                    //@ts-ignore
                     setCookie('refreshToken', res.refreshToken);
+                    //@ts-ignore
                     setCookie('token', res.accessToken.split('Bearer ')[1]);
                     const response: Response = await fetch(url, {
                         method: 'GET',
@@ -259,7 +259,7 @@ export const getUserInfo = async (): Promise<IUserInfoJSON | undefined | Error> 
                     return response.json();
                 }
             }).catch(e => {
-                throw new Error("response is not ok")
+
             });
         }
         catch (e) {

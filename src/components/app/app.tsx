@@ -106,9 +106,10 @@ const Main = () => {
 function App() {
     /** Получение данных об авторизации */
     const dispatch = useDispatch();
-    const {isAuth, isUserLoading} = useSelector(state => state.user);
+    const {isAuth, isUserLoading, isUserRequestFailed} = useSelector(state => state.user);
+    console.log(isUserRequestFailed)
     if (!isAuth && getCookie("token")) {
-        if (!isUserLoading) dispatch(getUser());
+        if (!isUserLoading && !isUserRequestFailed) dispatch(getUser());
     }
     React.useEffect(() => {
         dispatch(getIngredients());
