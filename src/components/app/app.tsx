@@ -107,7 +107,6 @@ function App() {
     /** Получение данных об авторизации */
     const dispatch = useDispatch();
     const {isAuth, isUserLoading, isUserRequestFailed} = useSelector(state => state.user);
-    console.log(isUserRequestFailed)
     if (!isAuth && getCookie("token")) {
         if (!isUserLoading && !isUserRequestFailed) dispatch(getUser());
     }
