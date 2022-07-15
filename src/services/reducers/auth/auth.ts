@@ -4,8 +4,8 @@ import {
     USER_LOGOUT_REQUEST_SUCCESS,
     USER_REQUEST_ERROR,
     USER_REQUEST_LOADING, USER_REQUEST_SUCCESS, USER_UPDATE_REQUEST_ERROR
-} from "../constants/auth";
-import {TAuthActions, TRecoverPasswordActions} from "../actions/auth";
+} from "../../constants/auth";
+import {TAuthActions, TRecoverPasswordActions} from "../../actions/auth";
 
 /** Данные о пользователе */
 type TUserState = {
