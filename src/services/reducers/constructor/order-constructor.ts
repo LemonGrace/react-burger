@@ -39,7 +39,6 @@ export const order = (state = initialStateOrder, action: TConstructorActions) =>
         }
         case ADD_INGREDIENT: {
             let arr = [...state.content];
-            console.log(arr.length)
             arr.push({ingredient: action.item, order: arr.length + 1});
             return { ...state, content: arr};
         }
