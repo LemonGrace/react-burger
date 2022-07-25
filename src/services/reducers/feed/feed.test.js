@@ -2,7 +2,7 @@ import * as types from '../../constants/feed';
 import {feed} from "./feed";
 
 const initialState = feed(undefined, {})
-describe('', () => {
+describe('feed reducer', () => {
     it('установка initial State', () => {
         const result = feed(undefined, {});
         expect(result).toEqual({
@@ -15,26 +15,23 @@ describe('', () => {
     it('загрузка данных о заказе', () => {
         const result = feed(initialState, {type: types.GET_ORDER_REQUEST});
         expect(result).toEqual({
+            ...initialState,
             isLoading: true,
-            isError: false,
-            orderSelected: null
         })
     })
 
     it('ошибка загрузки данных', () => {
         const result = feed(initialState, {type: types.GET_ORDER_ERROR});
         expect(result).toEqual({
-            isLoading: false,
+            ...initialState,
             isError: true,
-            orderSelected: null
         })
     })
 
     it('успешная загрузка данных о заказе', () => {
         const result = feed(initialState, {type: types.GET_ORDER_SUCCESS, data: exampleOrderInfo});
         expect(result).toEqual({
-            isLoading: false,
-            isError: false,
+            ...initialState,
             orderSelected: exampleOrderInfo[0]
         })
     })

@@ -19,17 +19,15 @@ describe('burger data reducer', () => {
     it('Установка статуса загрузки', () => {
         const result = burgerIngredient(initialState, {type: types.INGREDIENTS_REQUEST});
         expect(result).toEqual({
-            ingredients: [],
+            ...initialState,
             isIngredientsLoading: true,
-            isIngredientsFailed: false,
         })
     })
 
     it('Установка статуса ошибки', () => {
         const result = burgerIngredient(initialState, {type: types.INGREDIENTS_ERROR});
         expect(result).toEqual({
-            ingredients: [],
-            isIngredientsLoading: false,
+            ...initialState,
             isIngredientsFailed: true,
         })
     })
@@ -37,9 +35,8 @@ describe('burger data reducer', () => {
     it('Установка данных с бэка', () => {
         const result = burgerIngredient(initialState, {type: types.INGREDIENTS_SUCCESS, items: exampleData});
         expect(result).toEqual({
+            ...initialState,
             ingredients: exampleData,
-            isIngredientsLoading: false,
-            isIngredientsFailed: false,
         })
     })
 })

@@ -25,22 +25,16 @@ describe('reset password reducer', () => {
     it('Загрузка пользователя', () => {
         const result = user(initialState, {type: types.USER_REQUEST_LOADING});
         expect(result).toEqual({
-            username: "",
-            email: "",
+            ...initialState,
             isUserLoading: true,
-            isUserRequestFailed: false,
-            isAuth: false,
         })
     })
 
     it('Ошибка загрузки пользователя', () => {
         const result = user(initialState, {type: types.USER_REQUEST_ERROR});
         expect(result).toEqual({
-            username: "",
-            email: "",
-            isUserLoading: false,
+            ...initialState,
             isUserRequestFailed: true,
-            isAuth: false,
         })
     })
 
@@ -57,22 +51,16 @@ describe('reset password reducer', () => {
     it('Ошибка обновления данных', () => {
         const result = user(stateUserAuth, {type: types.USER_UPDATE_REQUEST_ERROR});
         expect(result).toEqual({
-            username: "alla",
-            email: "gg@r.rr",
-            isUserLoading: false,
+            ...stateUserAuth,
             isUserRequestFailed: true,
-            isAuth: true,
         })
     })
 
     it('Ошибка выхода из профиля', () => {
         const result = user(stateUserAuth, {type: types.USER_LOGOUT_REQUEST_ERROR});
         expect(result).toEqual({
-            username: "alla",
-            email: "gg@r.rr",
-            isUserLoading: false,
+            ...stateUserAuth,
             isUserRequestFailed: true,
-            isAuth: true,
         })
     })
 

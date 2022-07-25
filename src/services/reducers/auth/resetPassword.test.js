@@ -24,58 +24,47 @@ describe('reset password reducer', () => {
     it('Запрос email', () => {
         const result = resetPassword(initialState, {type: types.EMAIL_REQUEST});
         expect(result).toEqual({
+            ...initialState,
             isRequestLoading: true,
-            isRequestFailed: false,
-            isEmailSend: false,
-            isPasswordReset: false
         })
     })
 
     it('Запрос на сброс пароля', () => {
         const result = resetPassword(initialState, {type: types.RESET_PASSWORD_REQUEST});
         expect(result).toEqual({
+            ...initialState,
             isRequestLoading: true,
-            isRequestFailed: false,
-            isEmailSend: false,
-            isPasswordReset: false
         })
     })
 
     it('Ошибка отправки письма на почту', () => {
         const result = resetPassword(initialState, {type: types.EMAIL_ERROR});
         expect(result).toEqual({
-            isRequestLoading: false,
+            ...initialState,
             isRequestFailed: true,
-            isEmailSend: false,
-            isPasswordReset: false
         })
     })
 
     it('Ошибка сброса пароля', () => {
         const result = resetPassword(initialState, {type: types.RESET_PASSWORD_ERROR});
         expect(result).toEqual({
-            isRequestLoading: false,
+            ...initialState,
             isRequestFailed: true,
-            isEmailSend: false,
-            isPasswordReset: false
         })
     })
 
     it('Письмо успешно отправлено', () => {
         const result = resetPassword(initialState, {type: types.EMAIL_SUCCESS});
         expect(result).toEqual({
-            isRequestLoading: false,
-            isRequestFailed: false,
+            ...initialStateEmailSend,
             isEmailSend: true,
-            isPasswordReset: false
         })
     })
 
     it('Пароль успешно сброшен', () => {
         const result = resetPassword(initialStateEmailSend, {type: types.RESET_PASSWORD_SUCCESS});
         expect(result).toEqual({
-            isRequestLoading: false,
-            isRequestFailed: false,
+            ...initialStateEmailSend,
             isEmailSend: true,
             isPasswordReset: true
         })

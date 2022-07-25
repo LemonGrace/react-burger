@@ -67,20 +67,16 @@ describe('constructor reducer', () => {
     it('Установка статуса загрузки', () => {
         const result = order(initialState, {type: types.CREATE_ORDER_REQUEST});
         expect(result).toEqual({
-            order: null,
+            ...initialState,
             orderRequest: true,
-            orderFailed: false,
-            content: []
         })
     })
 
     it('Установка статуса ошибки', () => {
         const result = order(initialState, {type: types.CREATE_ORDER_ERROR});
         expect(result).toEqual({
-            order: null,
-            orderRequest: false,
+            ...initialState,
             orderFailed: true,
-            content: []
         })
     })
 

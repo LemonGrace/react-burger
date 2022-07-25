@@ -15,25 +15,19 @@ describe('wsReducer', () => {
     it('Успешная установка соединения', () => {
         const result = wsReducer(initialState, {type: types.WS_CONNECTION_SUCCESS});
         expect(result).toEqual({
+            ...initialState,
             wsConnected: true,
-            messages: []
         })
     })
 
     it('Ошибка установки соединения', () => {
         const result = wsReducer(initialState, {type: types.WS_CONNECTION_ERROR});
-        expect(result).toEqual({
-            wsConnected: false,
-            messages: []
-        })
+        expect(result).toEqual(initialState);
     })
 
     it('Закрытие соединения', () => {
         const result = wsReducer(initialState, {type: types.WS_CONNECTION_CLOSED});
-        expect(result).toEqual({
-            wsConnected: false,
-            messages: []
-        })
+        expect(result).toEqual(initialState);
     })
 
     it('Получение сообщения', () => {
