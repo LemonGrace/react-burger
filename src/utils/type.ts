@@ -41,9 +41,6 @@ export type TFeedOrdersData = {
 };
 
 export type TFeedOrders = {
-    orders: Array<IOrderFeed>,
-    total: number,
-    totalToday: number,
     isLoading: boolean,
     isError: boolean,
     orderSelected: IOrderFeed | null

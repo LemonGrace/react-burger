@@ -1,12 +1,12 @@
-import {TWebSocketActions} from "../actions/webSocket";
+import {TWebSocketActions} from "../../actions/webSocket";
 import {
     WS_CONNECTION_CLOSED,
     WS_CONNECTION_ERROR,
     WS_CONNECTION_SUCCESS,
     WS_GET_MESSAGE,
     WS_SEND_MESSAGE
-} from "../constants/webSocket";
-import {TFeedOrdersData} from "../../utils/type";
+} from "../../constants/webSocket";
+import {TFeedOrdersData} from "../../../utils/type";
 
 type TWSState = {
     wsConnected: boolean;

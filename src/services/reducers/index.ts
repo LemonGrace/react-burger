@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
-import {burgerIngredient, modal} from './burger'
-import {order} from "./order-constructor";
-import {user, resetPassword} from './auth'
-import {feed} from "./feed";
-import {wsReducer} from "./wsState";
+import {order} from "./constructor/order-constructor";
+import {user, resetPassword} from './auth/auth'
+import {feed} from "./feed/feed";
+import {wsReducer} from "./ws/wsState";
+import {modal} from "./modal/modal";
+import {burgerIngredient} from "./burger/burger";
 
 export const rootReducer = combineReducers({
     burgerIngredient,
