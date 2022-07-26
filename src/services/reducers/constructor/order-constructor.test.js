@@ -4,7 +4,7 @@ import {burgerIngredient} from "../burger/burger";
 import {exampleData} from "../burger/burger.test";
 
 const initialState = order(undefined, {});
-const stateWithData = {
+let stateWithData = {
     order: null,
     orderRequest: false,
     orderFailed: false,
@@ -50,6 +50,37 @@ const stateWithDataBun = {
         }
     ]
 }
+
+afterEach(() => {
+    stateWithData = {
+        order: null,
+        orderRequest: false,
+        orderFailed: false,
+        content: [
+            {
+                ingredient: exampleData[0],
+                order: 1
+            },
+            {
+                ingredient: exampleData[0],
+                order: 2
+            },
+            {
+                ingredient: exampleData[1],
+                order: 3
+            },
+            {
+                ingredient: exampleData[2],
+                order: 4
+            },
+            {
+                ingredient: exampleData[1],
+                order: 5
+            },
+        ]
+    }
+
+})
 
 describe('constructor reducer', () => {
     it('Установка initialState', () => {
