@@ -2,9 +2,9 @@ import {
     ADD_INGREDIENT, CREATE_ORDER_ERROR, CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, DEFAULT,
     DELETE_INGREDIENT,
     DELETE_ORDER, REORDER, REPLACE_BUN
-} from "../constants/order-constructor";
-import {TConstructorActions} from "../actions/constructor";
-import {IOrderItem} from "../../utils/type";
+} from "../../constants/order-constructor";
+import {TConstructorActions} from "../../actions/constructor";
+import {IOrderItem} from "../../../utils/type";
 
 /** Работа с заказом */
 type TOrderConstructor = {
